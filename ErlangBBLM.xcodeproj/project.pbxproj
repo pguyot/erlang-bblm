@@ -1,0 +1,303 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2E866DAB077236D900381A53 /* BBXTImplementationMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E866DA4077236D900381A53 /* BBXTImplementationMacros.h */; };
+		2E866DB9077236E700381A53 /* BBXTInterfaceStructsAndEnums.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E866DB2077236E700381A53 /* BBXTInterfaceStructsAndEnums.h */; };
+		5F35C49E05A096310030C7CA /* BBLMTextIterator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */; };
+		5F35C49F05A096310030C7CA /* BBLMInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */; };
+		5F35C4A005A096310030C7CA /* BBXTInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EADE3E7056EA159004A4EFC /* BBXTInterface.h */; };
+		5F35C4A305A096310030C7CA /* ErlangBBLM.cp in Sources */ = {isa = PBXBuildFile; fileRef = 2ED4605B05179C27006BE845 /* ErlangBBLM.cp */; };
+		5F35C4A505A096310030C7CA /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EADE3EB056EA181004A4EFC /* Carbon.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		2E8C2DA207778A51009F40D0 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.gcc;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXFileReference section */
+		2E866DA4077236D900381A53 /* BBXTImplementationMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBXTImplementationMacros.h; path = "BBEdit SDK/Interfaces/Tools/BBXTImplementationMacros.h"; sourceTree = "<group>"; };
+		2E866DB2077236E700381A53 /* BBXTInterfaceStructsAndEnums.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBXTInterfaceStructsAndEnums.h; path = "BBEdit SDK/Interfaces/Tools/BBXTInterfaceStructsAndEnums.h"; sourceTree = "<group>"; };
+		2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMTextIterator.h; path = "BBEdit SDK/Interfaces/Language Modules/BBLMTextIterator.h"; sourceTree = "<group>"; };
+		2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMInterface.h; path = "BBEdit SDK/Interfaces/Language Modules/BBLMInterface.h"; sourceTree = "<group>"; };
+		2EADE3E7056EA159004A4EFC /* BBXTInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBXTInterface.h; path = "BBEdit SDK/Interfaces/Tools/BBXTInterface.h"; sourceTree = "<group>"; };
+		2EADE3EB056EA181004A4EFC /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		2ED4605B05179C27006BE845 /* ErlangBBLM.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ErlangBBLM.cp; sourceTree = "<group>"; };
+		5F35C4A805A096310030C7CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5F35C4A905A096310030C7CA /* Erlang.bblm */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Erlang.bblm; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5F35C4A405A096310030C7CA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5F35C4A505A096310030C7CA /* Carbon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* Hello World */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77ADFE841716C02AAC07 /* Source */,
+				2EADE40E056EA22B004A4EFC /* SDK Headers */,
+				2EADE3EB056EA181004A4EFC /* Carbon.framework */,
+				5F35C4A805A096310030C7CA /* Info.plist */,
+				5F35C4A905A096310030C7CA /* Erlang.bblm */,
+			);
+			name = "Hello World";
+			sourceTree = "<group>";
+		};
+		08FB77ADFE841716C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				2ED4605B05179C27006BE845 /* ErlangBBLM.cp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		2EADE40E056EA22B004A4EFC /* SDK Headers */ = {
+			isa = PBXGroup;
+			children = (
+				2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */,
+				2E866DA4077236D900381A53 /* BBXTImplementationMacros.h */,
+				2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */,
+				2EADE3E7056EA159004A4EFC /* BBXTInterface.h */,
+				2E866DB2077236E700381A53 /* BBXTInterfaceStructsAndEnums.h */,
+			);
+			name = "SDK Headers";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5F35C49D05A096310030C7CA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5F35C49E05A096310030C7CA /* BBLMTextIterator.h in Headers */,
+				5F35C49F05A096310030C7CA /* BBLMInterface.h in Headers */,
+				5F35C4A005A096310030C7CA /* BBXTInterface.h in Headers */,
+				2E866DAB077236D900381A53 /* BBXTImplementationMacros.h in Headers */,
+				2E866DB9077236E700381A53 /* BBXTInterfaceStructsAndEnums.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		5F35C49C05A096310030C7CA /* Erlang */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2E4F91BE08631638009D6578 /* Build configuration list for PBXNativeTarget "Erlang" */;
+			buildPhases = (
+				5F35C49D05A096310030C7CA /* Headers */,
+				5F35C4A105A096310030C7CA /* Resources */,
+				5F35C4A205A096310030C7CA /* Sources */,
+				5F35C4A405A096310030C7CA /* Frameworks */,
+				5F35C4A605A096310030C7CA /* Rez */,
+			);
+			buildRules = (
+				2E8C2DA207778A51009F40D0 /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = Erlang;
+			productInstallPath = "$(HOME)/Library/Bundles";
+			productName = "Hello World";
+			productReference = 5F35C4A905A096310030C7CA /* Erlang.bblm */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 2E4F91C208631638009D6578 /* Build configuration list for PBXProject "ErlangBBLM" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 089C166AFE841209C02AAC07 /* Hello World */;
+			productRefGroup = 089C166AFE841209C02AAC07 /* Hello World */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5F35C49C05A096310030C7CA /* Erlang */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5F35C4A105A096310030C7CA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		5F35C4A605A096310030C7CA /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5F35C4A205A096310030C7CA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5F35C4A305A096310030C7CA /* ErlangBBLM.cp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2E4F91BF08631638009D6578 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Erlang;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = bblm;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		2E4F91C008631638009D6578 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Erlang;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = bblm;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		2E4F91C108631638009D6578 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Erlang;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = bblm;
+			};
+			name = Default;
+		};
+		2E4F91C308631638009D6578 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Development;
+		};
+		2E4F91C408631638009D6578 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Deployment;
+		};
+		2E4F91C508631638009D6578 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2E4F91BE08631638009D6578 /* Build configuration list for PBXNativeTarget "Erlang" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2E4F91BF08631638009D6578 /* Development */,
+				2E4F91C008631638009D6578 /* Deployment */,
+				2E4F91C108631638009D6578 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		2E4F91C208631638009D6578 /* Build configuration list for PBXProject "ErlangBBLM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2E4F91C308631638009D6578 /* Development */,
+				2E4F91C408631638009D6578 /* Deployment */,
+				2E4F91C508631638009D6578 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}
