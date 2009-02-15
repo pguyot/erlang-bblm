@@ -16,6 +16,9 @@ Source code and compilation
 
 The plug-in can be compiled with XCode and BBEdit SDK (it was compiled with the 13/02/2009 version of the SDK).
 
+Source code is available on Google Code:
+http://code.google.com/p/erlang-bblm/
+
 Current limitations
 -------------------
 
