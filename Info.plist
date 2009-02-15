@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Erlang</string>
 	<key>CFBundleGetInfoString</key>
-	<string>1.1, copyright © 2008-2009 by Paul Guyot, Semiocast.</string>
+	<string>1.2, copyright © 2008-2009 by Paul Guyot, Semiocast.</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.semiocast.bblm.erlang</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleVersion</key>
-	<string>1.1</string>
+	<string>1.2</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>com.barebones.bblminfo</key>
@@ -35,26 +35,10 @@
                     <key>BBLMIsHeaderKind</key>
                     <true/>
                 </dict>
-				<dict>
-					<key>BBLMLanguageSuffix</key>
-					<string>.app</string>
-                    <key>BBLMIsSourceKind</key>
-                    <true/>
-				</dict>
-				<dict>
-					<key>BBLMLanguageSuffix</key>
-					<string>.appup</string>
-                    <key>BBLMIsSourceKind</key>
-                    <true/>
-				</dict>
-				<dict>
-					<key>BBLMLanguageSuffix</key>
-					<string>.rel</string>
-                    <key>BBLMIsSourceKind</key>
-                    <true/>
-				</dict>
 			</array>
 			<key>BBLMCanGenerateHTMLForPreview</key>
+			<false/>
+			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
 			<false/>
@@ -115,15 +99,6 @@
                 <string>try</string>
                 <string>when</string>
                 <string>xor</string>
-                <string>?assert</string>
-                <string>?assertEqual</string>
-                <string>?assertNot</string>
-                <string>?assertMatch</string>
-                <string>?_test</string>
-                <string>?_assert</string>
-                <string>?_assertEqual</string>
-                <string>?_assertMatch</string>
-                <string>?_assertNot</string>
 			</array>
 			<key>BBLMLanguageCode</key>
 			<string>Erlg</string>
@@ -133,6 +108,183 @@
 			<string>ErlangMachO</string>
 			<key>BBLMScansFunctions</key>
 			<true/>
+			<key>BBLMSupportsOneByteKeywordLookups</key>
+			<false/>
+			<key>BBLMSupportsCFStringKeywordLookups</key>
+			<false/>
+			<key>BBLMSupportsTextCompletion</key>
+			<true/>
+			<key>BBLMUseHTMLFileSearchRules</key>
+			<false/>
+			<key>BBLMSupportsPredefinedNameLookups</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>BBLMSuffixMap</key>
+			<array>
+				<dict>
+					<key>BBLMLanguageSuffix</key>
+					<string>.app</string>
+				</dict>
+			</array>
+			<key>BBLMCanGenerateHTMLForPreview</key>
+			<false/>
+			<key>BBLMAlwaysGuessLanguage</key>
+			<false/>
+			<key>BBLMCanGuessLanguage</key>
+			<false/>
+			<key>BBLMColorsSyntax</key>
+			<true/>
+			<key>BBLMDroppedFilePathStyle</key>
+			<string>POSIX</string>
+			<key>BBLMFunctionScannerDoesFoldsToo</key>
+			<true/>
+			<key>BBLMIsCaseSensitive</key>
+			<true/>
+			<key>BBLMKeywordList</key>
+			<array>
+                <string>application</string>
+                <string>applications</string>
+                <string>description</string>
+                <string>env</string>
+                <string>id</string>
+                <string>included_applications</string>
+                <string>infinity</string>
+                <string>maxP</string>
+                <string>maxT</string>
+                <string>mod</string>
+                <string>modules</string>
+                <string>registered</string>
+                <string>start_phases</string>
+                <string>vsn</string>
+			</array>
+			<key>BBLMLanguageCode</key>
+			<string>ErlA</string>
+			<key>BBLMLanguageDisplayName</key>
+			<string>Erlang (Application Resource File)</string>
+			<key>BBLMMainFunctionName</key>
+			<string>ErlangMachO</string>
+			<key>BBLMScansFunctions</key>
+			<false/>
+			<key>BBLMSupportsOneByteKeywordLookups</key>
+			<false/>
+			<key>BBLMSupportsCFStringKeywordLookups</key>
+			<false/>
+			<key>BBLMSupportsTextCompletion</key>
+			<true/>
+			<key>BBLMUseHTMLFileSearchRules</key>
+			<false/>
+			<key>BBLMSupportsPredefinedNameLookups</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>BBLMSuffixMap</key>
+			<array>
+				<dict>
+					<key>BBLMLanguageSuffix</key>
+					<string>.appup</string>
+				</dict>
+			</array>
+			<key>BBLMCanGenerateHTMLForPreview</key>
+			<false/>
+			<key>BBLMAlwaysGuessLanguage</key>
+			<false/>
+			<key>BBLMCanGuessLanguage</key>
+			<false/>
+			<key>BBLMColorsSyntax</key>
+			<true/>
+			<key>BBLMDroppedFilePathStyle</key>
+			<string>POSIX</string>
+			<key>BBLMFunctionScannerDoesFoldsToo</key>
+			<true/>
+			<key>BBLMIsCaseSensitive</key>
+			<true/>
+			<key>BBLMKeywordList</key>
+			<array>
+                <string>add_application</string>
+                <string>add_module</string>
+                <string>apply</string>
+                <string>brutal_purge</string>
+                <string>code_change</string>
+                <string>delete_module</string>
+                <string>dynamic</string>
+                <string>load_module</string>
+                <string>load_object_code</string>
+                <string>load</string>
+                <string>point_of_no_return</string>
+                <string>purge</string>
+                <string>remove_application</string>
+                <string>remove</string>
+                <string>restart_application</string>
+                <string>restart_new_emulator</string>
+                <string>resume</string>
+                <string>soft_purge</string>
+                <string>start</string>
+                <string>stop</string>
+                <string>supervisor</string>
+                <string>suspend</string>
+                <string>sync_nodes</string>
+                <string>update</string>
+			</array>
+			<key>BBLMLanguageCode</key>
+			<string>ErlU</string>
+			<key>BBLMLanguageDisplayName</key>
+			<string>Erlang (Application Update File)</string>
+			<key>BBLMMainFunctionName</key>
+			<string>ErlangMachO</string>
+			<key>BBLMScansFunctions</key>
+			<false/>
+			<key>BBLMSupportsOneByteKeywordLookups</key>
+			<false/>
+			<key>BBLMSupportsCFStringKeywordLookups</key>
+			<false/>
+			<key>BBLMSupportsTextCompletion</key>
+			<true/>
+			<key>BBLMUseHTMLFileSearchRules</key>
+			<false/>
+			<key>BBLMSupportsPredefinedNameLookups</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>BBLMSuffixMap</key>
+			<array>
+				<dict>
+					<key>BBLMLanguageSuffix</key>
+					<string>.rel</string>
+				</dict>
+			</array>
+			<key>BBLMCanGenerateHTMLForPreview</key>
+			<false/>
+			<key>BBLMAlwaysGuessLanguage</key>
+			<false/>
+			<key>BBLMCanGuessLanguage</key>
+			<false/>
+			<key>BBLMColorsSyntax</key>
+			<true/>
+			<key>BBLMDroppedFilePathStyle</key>
+			<string>POSIX</string>
+			<key>BBLMFunctionScannerDoesFoldsToo</key>
+			<true/>
+			<key>BBLMIsCaseSensitive</key>
+			<true/>
+			<key>BBLMKeywordList</key>
+			<array>
+                <string>erts</string>
+                <string>load</string>
+                <string>none</string>
+                <string>permanent</string>
+                <string>release</string>
+                <string>temporary</string>
+                <string>transient</string>
+			</array>
+			<key>BBLMLanguageCode</key>
+			<string>ErlR</string>
+			<key>BBLMLanguageDisplayName</key>
+			<string>Erlang (Release Resource File)</string>
+			<key>BBLMMainFunctionName</key>
+			<string>ErlangMachO</string>
+			<key>BBLMScansFunctions</key>
+			<false/>
 			<key>BBLMSupportsOneByteKeywordLookups</key>
 			<false/>
 			<key>BBLMSupportsCFStringKeywordLookups</key>
@@ -12373,6 +12525,60 @@
 <string>zlib:gunzip</string>
 <string>zlib:gunzip(&lt;#Bin#&gt;)</string>
 <string>zlib:gunzip(Bin) -&gt; Decompressed</string>
+    </array>
+    <key>ErlangOTPApplications</key>
+    <array>
+        <string>appmon</string>
+        <string>asn1</string>
+        <string>common_test</string>
+        <string>compiler</string>
+        <string>cosEvent</string>
+        <string>cosEventDomain</string>
+        <string>cosFileTransfer</string>
+        <string>cosNotification</string>
+        <string>cosProperty</string>
+        <string>cosTime</string>
+        <string>cosTransactions</string>
+        <string>crypto</string>
+        <string>debugger</string>
+        <string>dialyzer</string>
+        <string>docbuilder</string>
+        <string>edoc</string>
+        <string>erl_interface</string>
+        <string>et</string>
+        <string>eunit</string>
+        <string>gs</string>
+        <string>hipe</string>
+        <string>ic</string>
+        <string>inets</string>
+        <string>inviso</string>
+        <string>jinterface</string>
+        <string>kernel</string>
+        <string>megaco</string>
+        <string>mnesia</string>
+        <string>observer</string>
+        <string>odbc</string>
+        <string>orber</string>
+        <string>os_mon</string>
+        <string>otp_mibs</string>
+        <string>parsetools</string>
+        <string>percept</string>
+        <string>pman</string>
+        <string>public_key</string>
+        <string>runtime_tools</string>
+        <string>sasl</string>
+        <string>snmp</string>
+        <string>ssh</string>
+        <string>ssl</string>
+        <string>stdlib</string>
+        <string>syntax_tools</string>
+        <string>test_server</string>
+        <string>toolbar</string>
+        <string>tools</string>
+        <string>tv</string>
+        <string>typer</string>
+        <string>webtool</string>
+        <string>xmerl</string>
     </array>
 </dict>
 </plist>

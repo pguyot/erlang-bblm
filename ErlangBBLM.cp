@@ -46,6 +46,12 @@
 #define ATTRIBUTES_FOR_COMPLETION	CFSTR("ErlangAttributesForCompletion")
 #define DOCTAGS_FOR_COMPLETION		CFSTR("ErlangDocTagsForCompletion")
 #define FUNCTIONS_FOR_COMPLETION	CFSTR("ErlangFunctionsForCompletion")
+#define OTP_APPLICATIONS			CFSTR("ErlangOTPApplications")
+
+#define kErlangCodeLangType 'Erlg'
+#define kErlangApplicationResourceFileLangType 'ErlA'
+#define kErlangApplicationUpgradeFileLangType 'ErlU'
+#define kErlangReleaseResourceFileLangType 'ErlR'
 
 #define DEBUG 0
 
@@ -68,9 +74,40 @@ void debugf_(const char* func,const char* fileName,long line, const char*fmt,...
 CFArrayRef gAttributesDict = NULL;
 CFArrayRef gFunctionsDict = NULL;
 CFArrayRef gDocTagsDict = NULL;
+CFSetRef gOTPApplications = NULL;
+
 CFSetRef gPredefinedNames = NULL;
 
 static const CFStringRef kCompletionDictKeys[] = {kBBLMCompletionSymbolType, kBBLMSymbolCompletionDisplayString, kBBLMSymbolCompletionText};
+
+static CFArrayRef BundleCFArray(CFBundleRef inBundle, CFStringRef inKey)
+{
+	CFArrayRef theResult = (CFArrayRef) CFBundleGetValueForInfoDictionaryKey(inBundle, inKey);
+	if (theResult != NULL)
+	{
+		CFRetain(theResult);
+	}
+	return theResult;
+}
+
+static CFSetRef BundleCFArrayToCFSet(CFBundleRef inBundle, CFStringRef inKey)
+{
+	CFSetRef theResult = NULL;
+	CFArrayRef theArray = (CFArrayRef) CFBundleGetValueForInfoDictionaryKey(inBundle, inKey);
+	if (theArray != NULL)
+	{
+		CFIndex nbValues = CFArrayGetCount(theArray);
+		CFMutableSetRef theSet = CFSetCreateMutable(NULL, nbValues, &kCFTypeSetCallBacks);
+		int indexValue;
+		for (indexValue = 0; indexValue < nbValues; indexValue++)
+		{
+			CFStringRef theKeyword = (CFStringRef) CFArrayGetValueAtIndex(theArray, indexValue);
+			CFSetAddValue(theSet, theKeyword);
+		}
+		theResult = theSet;
+	}
+	return theResult;
+}
 
 static OSErr Init()
 {
@@ -78,21 +115,13 @@ static OSErr Init()
 	CFBundleRef myBundle = CFBundleGetBundleWithIdentifier(BUNDLE_IDENTIFIER);
 	if (myBundle != NULL)
 	{
-		gAttributesDict = (CFArrayRef) CFBundleGetValueForInfoDictionaryKey(myBundle, ATTRIBUTES_FOR_COMPLETION);
-		if (gAttributesDict != NULL)
-		{
-			CFRetain(gAttributesDict);
-		}
-		gDocTagsDict = (CFArrayRef) CFBundleGetValueForInfoDictionaryKey(myBundle, DOCTAGS_FOR_COMPLETION);
-		if (gDocTagsDict != NULL)
-		{
-			CFRetain(gDocTagsDict);
-		}
-		gFunctionsDict = (CFArrayRef) CFBundleGetValueForInfoDictionaryKey(myBundle, FUNCTIONS_FOR_COMPLETION);
+		gAttributesDict = BundleCFArray(myBundle, ATTRIBUTES_FOR_COMPLETION);
+		gDocTagsDict = BundleCFArray(myBundle, DOCTAGS_FOR_COMPLETION);
+		gFunctionsDict = BundleCFArray(myBundle, FUNCTIONS_FOR_COMPLETION);
+		gOTPApplications = BundleCFArrayToCFSet(myBundle, OTP_APPLICATIONS);
+
 		if (gFunctionsDict != NULL)
 		{
-			CFRetain(gFunctionsDict);
-
             // Create the set of predefined names.
             CFIndex nbValues = CFArrayGetCount(gFunctionsDict);
             CFMutableSetRef theSet = CFSetCreateMutable(NULL, nbValues / 3, &kCFTypeSetCallBacks);
@@ -128,6 +157,11 @@ static void Dispose()
 	{
 		CFRelease(gFunctionsDict);
 		gFunctionsDict = NULL;
+	}
+	if (gOTPApplications != NULL)
+	{
+		CFRelease(gOTPApplications);
+		gOTPApplications = NULL;
 	}
 	if (gPredefinedNames != NULL)
 	{
@@ -194,10 +228,10 @@ static UniChar nextchar(struct runloc& r, BBLMTextIterator &p, BBLMParamBlock &p
 	return 0;
 }
 
-static bool addRun(BBLMRunCode kind, int  start,int len , const BBLMCallbackBlock& bblm_callbacks)
+static bool addRun(BBLMRunCode kind, int  start,int len , const BBLMCallbackBlock& bblm_callbacks, UInt32 inLanguage)
 {
 	if (len > 0) { // Tie off the code run we were in, unless the length is zero.
-		return bblmAddRun(	&bblm_callbacks, 'Erlg',
+		return bblmAddRun(	&bblm_callbacks, inLanguage,
 							kind, start, len, false);
 							
 	}
@@ -206,9 +240,9 @@ static bool addRun(BBLMRunCode kind, int  start,int len , const BBLMCallbackBloc
 	}
 }					
 
-static bool addRunAt (BBLMRunCode kind, struct runloc& r, const BBLMCallbackBlock& bblm_callbacks, int off=0)
+static bool addRunAt(BBLMRunCode kind, struct runloc& r, const BBLMCallbackBlock& bblm_callbacks, UInt32 inLanguage, int off=0)
 {
-	bool more_runs = addRun(kind, r.last_start, r.pos - r.last_start+1+off, bblm_callbacks);
+	bool more_runs = addRun(kind, r.last_start, r.pos - r.last_start+1+off, bblm_callbacks, inLanguage);
 	r.last_start =  r.pos+1+off;
 	return more_runs;
 }
@@ -240,7 +274,7 @@ static bool colormacro(
 			UInt32 nameLen = r.pos - startChar - 1;
 			// Is it a macro?
 			if (isMacro(nameIter, nameLen, bblm_callbacks)) {
-				result = addRunAt(kErlRunIsMacroName, r, bblm_callbacks, -1);
+				result = addRunAt(kErlRunIsMacroName, r, bblm_callbacks, pb.fLanguage, -1);
 			}
 			break;
 		}
@@ -262,7 +296,7 @@ static bool colorstr(
 	
 	while (c = nextchar(r, p, pb)) {
 		if (c == '"') {
-			result = addRunAt(kBBLMRunIsSingleString,r,bblm_callbacks);
+			result = addRunAt(kBBLMRunIsSingleString, r, bblm_callbacks, pb.fLanguage);
 			break;
 		}
 		if (c == '\r' || c == '\n') {
@@ -293,7 +327,7 @@ static bool colorcomment(BBLMParamBlock &pb,
 		while (c = nextchar(r, p, pb))
 		{
 			if (c=='@') {
-				more_runs = addRunAt(kBBLMRunIsLineComment, r, bblm_callbacks, -1);
+				more_runs = addRunAt(kBBLMRunIsLineComment, r, bblm_callbacks, pb.fLanguage, -1);
 				if (!more_runs) {
 					break;
 				}
@@ -303,7 +337,7 @@ static bool colorcomment(BBLMParamBlock &pb,
 						break;
 					}
 				}
-				more_runs = addRunAt(kErlRunIsCommentTag, r, bblm_callbacks, -1);
+				more_runs = addRunAt(kErlRunIsCommentTag, r, bblm_callbacks, pb.fLanguage, -1);
 				if (!more_runs) {
 					break;
 				}
@@ -321,7 +355,7 @@ static bool colorcomment(BBLMParamBlock &pb,
 			c = nextchar(r, p, pb);
 		}
 	}
-	return more_runs && addRunAt(kBBLMRunIsLineComment,r,bblm_callbacks);
+	return more_runs && addRunAt(kBBLMRunIsLineComment,r,bblm_callbacks, pb.fLanguage);
 }
 
 // Compute the runs for color.
@@ -350,7 +384,7 @@ static void CalculateRuns(BBLMParamBlock &pb,
 		case '"': 
 			// This might be a (valid) string.
 			// Until now, we had code.
-			more_runs = addRunAt(kBBLMRunIsCode, r, bblm_callbacks, -1);
+			more_runs = addRunAt(kBBLMRunIsCode, r, bblm_callbacks, pb.fLanguage, -1);
 			if (more_runs)
 			{
 				more_runs = colorstr(pb,r,p,bblm_callbacks);
@@ -359,7 +393,7 @@ static void CalculateRuns(BBLMParamBlock &pb,
 		case '?': 
 			// This might be a macro invocation.
 			// Until now, we had code.
-			more_runs = addRunAt(kBBLMRunIsCode, r, bblm_callbacks, -1);
+			more_runs = addRunAt(kBBLMRunIsCode, r, bblm_callbacks, pb.fLanguage, -1);
 			if (more_runs)
 			{
 				more_runs = colormacro(pb, r, p, bblm_callbacks);
@@ -368,7 +402,7 @@ static void CalculateRuns(BBLMParamBlock &pb,
 		case '%':
 			// This is a comment, for sure.
 			// Until now, we had code.
-			more_runs = addRunAt(kBBLMRunIsCode, r, bblm_callbacks, -1);
+			more_runs = addRunAt(kBBLMRunIsCode, r, bblm_callbacks, pb.fLanguage, -1);
 			if (more_runs)
 			{
 				more_runs = colorcomment(pb, r, p, bblm_callbacks); 
@@ -386,7 +420,7 @@ static void CalculateRuns(BBLMParamBlock &pb,
 	}
 	if (more_runs)
 	{
-		addRunAt(kBBLMRunIsCode, r, bblm_callbacks, -1);
+		addRunAt(kBBLMRunIsCode, r, bblm_callbacks, pb.fLanguage, -1);
 	}
 }
 
@@ -1124,7 +1158,7 @@ static void AddSymbols(CFStringRef inPartial, CFMutableArrayRef inCompletionArra
 	}
 }
 
-static void CreateTextCompletionArray(bblmCreateCompletionArrayParams& ioParams)
+static void CreateTextCompletionArray(bblmCreateCompletionArrayParams& ioParams, UInt32 inLanguage)
 {
 	CFMutableArrayRef theCompletionArray = CFArrayCreateMutable(NULL, 0, &kCFTypeArrayCallBacks);
 	UInt32 additionalLookup = kBBLMSymbolLookupPredefinedNames | kBBLMSymbolLookupClippings | kBBLMSymbolLookupWordsInFrontWindow;
@@ -1137,9 +1171,11 @@ static void CreateTextCompletionArray(bblmCreateCompletionArrayParams& ioParams)
 		AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gDocTagsDict, kBBLMSymbolTypeSGMLAttributeName);
 	} else {
 		// Code (and everything else).
-		additionalLookup = kBBLMSymbolLookupWordsInFrontWindow | kBBLMSymbolLookupClippings;
-		AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gFunctionsDict, kBBLMSymbolTypeFunction);
-		AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gAttributesDict, kBBLMSymbolTypeMacro);
+		if (inLanguage == kErlangCodeLangType) {
+			additionalLookup = kBBLMSymbolLookupWordsInFrontWindow | kBBLMSymbolLookupClippings;
+			AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gFunctionsDict, kBBLMSymbolTypeFunction);
+			AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gAttributesDict, kBBLMSymbolTypeMacro);
+		}
 	}
 	
 	ioParams.fOutAdditionalLookupFlags = additionalLookup;
@@ -1147,14 +1183,23 @@ static void CreateTextCompletionArray(bblmCreateCompletionArrayParams& ioParams)
 	ioParams.fOutPreferredCompletionIndex = 0;
 }
 
-static void PredefinedNameLookup(bblmKeywordCFStringParams& ioParams)
+static void PredefinedNameLookup(bblmKeywordCFStringParams& ioParams, UInt32 inLanguage)
 {
-    // Match the name against the function names.
-    // The set was built during initialization.
-    if (CFSetContainsValue(gPredefinedNames, ioParams.fToken))
-    {
-        ioParams.fKeywordMatched = true;
-    }
+	if (inLanguage == kErlangCodeLangType) {
+		// Match the name against the function names.
+		// The set was built during initialization.
+		if (CFSetContainsValue(gPredefinedNames, ioParams.fToken))
+		{
+			ioParams.fKeywordMatched = true;
+		}
+	} else if ((inLanguage == kErlangReleaseResourceFileLangType) || (inLanguage == kErlangApplicationResourceFileLangType)) {
+		// Match the name against the list of OTP applications.
+		// The set was built during initialization.
+		if (CFSetContainsValue(gOTPApplications, ioParams.fToken))
+		{
+			ioParams.fKeywordMatched = true;
+		}
+	}
 }
 
 extern "C"
@@ -1250,13 +1295,13 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 			break;
 		}
 
-		case kBBLMMatchKeywordMessage:
+		case kBBLMMatchKeywordWithCFStringMessage:
 		{
-			debugf("kBBLMMatchKeywordMessage", NULL);
+			debugf("kBBLMMatchKeywordWithCFStringMessage", NULL);
 		    result = noErr;
 		    break;
 		}
-
+			
 		case kBBLMSetCategoriesMessage:
 		{
 			debugf("kBBLMSetCategoriesMessage", NULL);
@@ -1289,14 +1334,14 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 		case kBBLMCreateTextCompletionArray:
 		{
 			debugf("kBBLMCreateTextCompletionArray", NULL);
-			CreateTextCompletionArray(params.fCreateCompletionArrayParams);
+			CreateTextCompletionArray(params.fCreateCompletionArrayParams, params.fLanguage);
 			result = noErr;
 			break;
 		}
 		case kBBLMMatchPredefinedNameMessage:
 		{
 			debugf("kBBLMMatchPredefinedNameMessage", NULL);
-		    PredefinedNameLookup(params.fMatchKeywordWithCFStringParams);
+		    PredefinedNameLookup(params.fMatchKeywordWithCFStringParams, params.fLanguage);
 			result = noErr;
 			break;
 		}

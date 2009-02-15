@@ -38,9 +38,6 @@ are actually located in ERL_ROOT/module-vsn/include/file.hrl, where vsn cannot b
 
 * I didn't exploit the folding types yet. Plus folding always happen for the whole function, not for individual clauses.
 
-* Application resource files, application upgrade files and release files are
-recognized, but they do not have a syntax colorization of their own.
-
 Change history
 --------------
 
@@ -54,6 +51,9 @@ Change history
 [ENH]   Added all keywords known by erl_parse:reserved_words/1.
 [ENH]   Added functions from the math module.
 [ENH]   Recognize .rel, .app and .appup files.
+
+1.2 (?).
+[ENH]   Improved support for .rel, .app and .appup files.
 
 License
 -------
