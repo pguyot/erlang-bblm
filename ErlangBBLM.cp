@@ -559,6 +559,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
         } else if (theChar == ')') {
 			if (parenthesisCount == 0) {
                 state = kMatchAtomPClosingParenthesis;
+    		    theFirstParamEnd = inIter.Offset() - 1;
                 theParamEnd = inIter.Offset();
             } else {
                 parenthesisCount--;

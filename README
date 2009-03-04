@@ -54,6 +54,8 @@ Change history
 
 1.2 (?).
 [ENH]   Improved support for .rel, .app and .appup files.
+[FIX]   Fixed a bug that would yield to a crash when editing an attribute with
+        no parameter.
 
 License
 -------
