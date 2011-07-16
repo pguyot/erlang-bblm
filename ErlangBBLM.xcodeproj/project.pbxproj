@@ -129,7 +129,11 @@
 			isa = PBXProject;
 			buildConfigurationList = 2E4F91C208631638009D6578 /* Build configuration list for PBXProject "ErlangBBLM" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 089C166AFE841209C02AAC07 /* Hello World */;
 			productRefGroup = 089C166AFE841209C02AAC07 /* Hello World */;
 			projectDirPath = "";
@@ -182,6 +186,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = 4.2;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
@@ -212,6 +217,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = 4.2;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
@@ -236,6 +242,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = 4.2;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
@@ -256,21 +263,21 @@
 		2E4F91C308631638009D6578 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 			};
 			name = Development;
 		};
 		2E4F91C408631638009D6578 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 			};
 			name = Deployment;
 		};
 		2E4F91C508631638009D6578 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 			};
 			name = Default;
 		};
