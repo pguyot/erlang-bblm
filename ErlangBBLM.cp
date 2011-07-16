@@ -46,12 +46,27 @@
 #define ATTRIBUTES_FOR_COMPLETION	CFSTR("ErlangAttributesForCompletion")
 #define DOCTAGS_FOR_COMPLETION		CFSTR("ErlangDocTagsForCompletion")
 #define FUNCTIONS_FOR_COMPLETION	CFSTR("ErlangFunctionsForCompletion")
+#define TYPES_FOR_COMPLETION        CFSTR("ErlangTypesForCompletion")
 #define OTP_APPLICATIONS			CFSTR("ErlangOTPApplications")
 
 #define kErlangCodeLangType 'Erlg'
 #define kErlangApplicationResourceFileLangType 'ErlA'
 #define kErlangApplicationUpgradeFileLangType 'ErlU'
 #define kErlangReleaseResourceFileLangType 'ErlR'
+#define kErlangScriptFileLangType 'ErlS'
+
+#define kBBLMSupportsPredefinedNameLookupsNotInSDKYet	(kBBLMMatchPredefinedNameMessage + 1)
+
+#pragma options align=mac68k
+
+typedef struct
+{
+	CFURLRef	fDocument;
+	CFStringRef	fName;
+	CFURLRef	fResolvedFile;
+} bblmResolveIncludeFileNotInSDKYetParams;
+
+#pragma options align=reset
 
 #define DEBUG 0
 
@@ -63,7 +78,7 @@ void debugf_(const char* func,const char* fileName,long line, const char*fmt,...
 	char msg[256];
 	va_start(arg, fmt);
 	vsnprintf(msg,256 ,fmt, arg);
-    DebugAssert(COMPONENT_SIGNATURE, DEBUG_NO_OPTIONS, "BBErl.LM" ": " , msg, nil, fileName, line, 0 );
+    DebugAssert(COMPONENT_SIGNATURE, DEBUG_NO_OPTIONS, "ErlangBBLM" ": " , msg, nil, fileName, line, 0 );
 
 }
 #define debugf(FMT,...)  debugf_( __FUNCTION__,__FILE__, __LINE__,FMT,__VA_ARGS__);
@@ -74,6 +89,9 @@ void debugf_(const char* func,const char* fileName,long line, const char*fmt,...
 CFArrayRef gAttributesDict = NULL;
 CFArrayRef gFunctionsDict = NULL;
 CFArrayRef gDocTagsDict = NULL;
+CFArrayRef gTypesDict = NULL;
+CFSetRef gNonParametrizedTypesSet = NULL;
+CFSetRef gParametrizedTypesSet = NULL;
 CFSetRef gOTPApplications = NULL;
 
 CFSetRef gPredefinedNames = NULL;
@@ -118,6 +136,7 @@ static OSErr Init()
 		gAttributesDict = BundleCFArray(myBundle, ATTRIBUTES_FOR_COMPLETION);
 		gDocTagsDict = BundleCFArray(myBundle, DOCTAGS_FOR_COMPLETION);
 		gFunctionsDict = BundleCFArray(myBundle, FUNCTIONS_FOR_COMPLETION);
+        gTypesDict = BundleCFArray(myBundle, TYPES_FOR_COMPLETION);
 		gOTPApplications = BundleCFArrayToCFSet(myBundle, OTP_APPLICATIONS);
 
 		if (gFunctionsDict != NULL)
@@ -132,6 +151,25 @@ static OSErr Init()
                 CFSetAddValue(theSet, theName);
             }
             gPredefinedNames = theSet;
+		}
+		if (gTypesDict != NULL)
+		{
+            // Create the set of parametrized and non-parametrized built-in types.
+            CFIndex nbValues = CFArrayGetCount(gTypesDict);
+            CFMutableSetRef theParametrizedSet = CFSetCreateMutable(NULL, nbValues / 3, &kCFTypeSetCallBacks);
+            CFMutableSetRef theNonParametrizedSet = CFSetCreateMutable(NULL, nbValues / 3, &kCFTypeSetCallBacks);
+            CFIndex indexValue;
+            for (indexValue = 0; indexValue < nbValues; indexValue += 3)
+            {
+                CFStringRef theName = (CFStringRef) CFArrayGetValueAtIndex(gTypesDict, indexValue);
+                if (CFStringHasSuffix(theName, CFSTR("()"))) {
+                    CFSetAddValue(theNonParametrizedSet, theName);
+                } else {
+                    CFSetAddValue(theParametrizedSet, theName);
+                }
+            }
+            gNonParametrizedTypesSet = theNonParametrizedSet;
+            gParametrizedTypesSet = theParametrizedSet;
 		}
 	} else {
 		result = fnfErr;
@@ -158,6 +196,11 @@ static void Dispose()
 		CFRelease(gFunctionsDict);
 		gFunctionsDict = NULL;
 	}
+	if (gTypesDict != NULL)
+	{
+		CFRelease(gTypesDict);
+		gTypesDict = NULL;
+	}
 	if (gOTPApplications != NULL)
 	{
 		CFRelease(gOTPApplications);
@@ -174,7 +217,9 @@ static void Dispose()
 enum
 {
 	kErlRunIsCommentTag = kBBLMFirstUserRunKind,
-	kErlRunIsMacroName
+	kErlRunIsMacroName,
+    kErlRunIsType,
+    kErlRunIsBuiltInType
 };
 
 // My own function kinds.
@@ -269,7 +314,7 @@ static bool colormacro(
 	BBLMTextIterator nameIter(p);
 	nameIter++;
 	
-	while (c = nextchar(r, p, pb)) {
+	while ((c = nextchar(r, p, pb))) {
 		if (!iswordchar(c)) {
 			UInt32 nameLen = r.pos - startChar - 1;
 			// Is it a macro?
@@ -283,7 +328,6 @@ static bool colormacro(
 }
 
 // Color a string, i.e. define a run until the next " character.
-// If a return is encountered, exit.
 // If a backslash is encountered, skip the next character.
 static bool colorstr(
 				BBLMParamBlock &pb,
@@ -294,15 +338,14 @@ static bool colorstr(
 	bool result = true;
 	UniChar c;
 	
-	while (c = nextchar(r, p, pb)) {
+	while ((c = nextchar(r, p, pb))) {
 		if (c == '"') {
 			result = addRunAt(kBBLMRunIsSingleString, r, bblm_callbacks, pb.fLanguage);
 			break;
 		}
-		if (c == '\r' || c == '\n') {
-			// Not a string.
-			break;
-		}
+        if (c=='\r'|| c=='\n'){
+            break;
+        }
 		if (c == '\\'){
 			nextchar(r, p, pb);
 		}
@@ -324,7 +367,7 @@ static bool colorcomment(BBLMParamBlock &pb,
 	if (c == '%')
 	{
 		// Double %, scan for edoc tags.
-		while (c = nextchar(r, p, pb))
+		while ((c = nextchar(r, p, pb)))
 		{
 			if (c=='@') {
 				more_runs = addRunAt(kBBLMRunIsLineComment, r, bblm_callbacks, pb.fLanguage, -1);
@@ -332,7 +375,7 @@ static bool colorcomment(BBLMParamBlock &pb,
 					break;
 				}
 
-				while (c = nextchar(r, p, pb)) {
+				while ((c = nextchar(r, p, pb))) {
 					if (c==' ' || c=='\r' || c=='\n') {
 						break;
 					}
@@ -356,6 +399,86 @@ static bool colorcomment(BBLMParamBlock &pb,
 		}
 	}
 	return more_runs && addRunAt(kBBLMRunIsLineComment,r,bblm_callbacks, pb.fLanguage);
+}
+
+// Color a type, i.e. define a run until the next dot character.
+static bool colortype(
+                     BBLMParamBlock &pb,
+                     struct runloc &r,
+                     BBLMTextIterator &p,
+                     const BBLMCallbackBlock &bblm_callbacks)
+{
+	bool result = true;
+	bool more_runs = true;
+	UniChar c;
+	c = p[0];
+    CFMutableStringRef candidateCFStr = CFStringCreateMutable(NULL, p.CharsLeft());
+    bool inToken = false;
+    
+    // Skip first token (typically the attribute name).
+    if (c == '-') {
+        do {
+            c = nextchar(r, p, pb);
+        } while (iswordchar(c));
+        more_runs = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage);
+    }
+	
+	while (c && more_runs)
+	{
+        switch (c)
+        {
+            case '.':
+                result = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage);
+                more_runs = false;
+                break;
+            case '(':
+                if (p[1] == ')') {
+                    CFStringAppend(candidateCFStr, CFSTR("()"));
+                    if (CFSetContainsValue(gNonParametrizedTypesSet, candidateCFStr)) {
+                        more_runs = addRunAt(kErlRunIsBuiltInType, r, bblm_callbacks, pb.fLanguage, 1);
+                        CFStringReplaceAll(candidateCFStr, CFSTR(""));
+                    }
+                } else {
+                    if (CFSetContainsValue(gParametrizedTypesSet, candidateCFStr)) {
+                        more_runs = addRunAt(kErlRunIsBuiltInType, r, bblm_callbacks, pb.fLanguage, - 2);
+                    }
+                }
+                inToken = false;
+                break;
+            case '%':
+                // This is a comment, for sure.
+                more_runs = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage);
+                if (more_runs)
+                {
+                    more_runs = colorcomment(pb, r, p, bblm_callbacks); 
+                }
+                break;
+            case '\\':
+                // Skip the next character.
+                nextchar(r, p, pb);
+                break;
+            default:
+                // inToken transition.
+                if (iswordchar(c) || c == ':') {
+                    if (!inToken) {
+                        more_runs = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage, -1);
+                        CFStringReplaceAll(candidateCFStr, CFSTR(""));
+                        inToken = true;
+                    }
+                    CFStringAppendCharacters(candidateCFStr, &c, 1);
+                } else {
+                    if (inToken) {
+                        more_runs = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage, -1);
+                        inToken = false;
+                    }
+                }
+        }
+        if (more_runs) {
+            c = nextchar(r, p, pb);
+        }
+	}
+    CFRelease(candidateCFStr);
+	return result;
 }
 
 // Compute the runs for color.
@@ -382,7 +505,7 @@ static void CalculateRuns(BBLMParamBlock &pb,
 		switch (c)
 		{
 		case '"': 
-			// This might be a (valid) string.
+			// This might be a string.
 			// Until now, we had code.
 			more_runs = addRunAt(kBBLMRunIsCode, r, bblm_callbacks, pb.fLanguage, -1);
 			if (more_runs)
@@ -408,6 +531,17 @@ static void CalculateRuns(BBLMParamBlock &pb,
 				more_runs = colorcomment(pb, r, p, bblm_callbacks); 
 			}
 			break;
+        case '-': 
+            // This might be a type.
+            if (p.strcmp("-type") == 0 || p.strcmp("-opaque") == 0 || p.strcmp("-spec") == 0 || p.strcmp("-record") == 0) {
+                // Until now, we had code.
+                more_runs = addRunAt(kBBLMRunIsCode, r, bblm_callbacks, pb.fLanguage, -1);
+                if (more_runs)
+                {
+                    more_runs = colortype(pb,r,p,bblm_callbacks);
+                }
+            }
+            break;
 		case '\\':
 			// Skip the next character.
 			nextchar(r, p, pb);
@@ -472,6 +606,7 @@ static bool eat_line(BBLMTextIterator& inIter)
 }
 
 // Match an atom followed by something in parentheses, counting commas and noting when the first parameter started and ended.
+// Optionally include colons in the atom.
 static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStart, UInt32* outAtomEnd, UInt32* outFirstParamStart, UInt32* outFirstParamEnd, UInt32* outParamEnd, UInt32* outNbArgs)
 {
     enum EMatchAtomPState {
@@ -1062,12 +1197,12 @@ static void ScanForFunctions(BBLMParamBlock& pb,
 
 static void SetCategories(BBLMCategoryTable inCategoryTable)
 {
-    inCategoryTable['?'] = 'a';   
-    inCategoryTable['_'] = 'a';   
-    inCategoryTable['-'] = 'a';
-    inCategoryTable['!'] = 'a';
-    inCategoryTable[':'] = 'a';
-    inCategoryTable['.'] = 'a';
+    inCategoryTable[(SInt8) '?'] = 'a';   
+    inCategoryTable[(SInt8) '_'] = 'a';   
+    inCategoryTable[(SInt8) '-'] = 'a';
+    inCategoryTable[(SInt8) '!'] = 'a';
+    inCategoryTable[(SInt8) ':'] = 'a';
+    inCategoryTable[(SInt8) '.'] = 'a';
 }
 
 static void AdjustRangeForTextCompletion(BBLMParamBlock &pb, bblmAdjustCompletionRangeParams& ioParams)
@@ -1126,11 +1261,11 @@ static void FilterRunForTextCompletion(bblmFilterCompletionRunParams ioParams)
 
 static void SetCategoryTableForTextCompletion(BBLMCategoryTable inCategoryTable)
 {
-    inCategoryTable['?'] = 'a';   
-    inCategoryTable['_'] = 'a';   
-    inCategoryTable['-'] = 'a';
-    inCategoryTable[':'] = 'a';
-    inCategoryTable['.'] = '-';
+    inCategoryTable[(SInt8) '?'] = 'a';   
+    inCategoryTable[(SInt8) '_'] = 'a';   
+    inCategoryTable[(SInt8) '-'] = 'a';
+    inCategoryTable[(SInt8) ':'] = 'a';
+    inCategoryTable[(SInt8) '.'] = '-';
 }
 
 static void AddSymbols(CFStringRef inPartial, CFMutableArrayRef inCompletionArray, CFArrayRef inDict, CFStringRef inType)
@@ -1170,9 +1305,13 @@ static void CreateTextCompletionArray(bblmCreateCompletionArrayParams& ioParams,
 	} else if (runKind == kErlRunIsCommentTag) {
 		additionalLookup = kBBLMSymbolLookupClippings;
 		AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gDocTagsDict, kBBLMSymbolTypeSGMLAttributeName);
+	} else if (runKind == kErlRunIsType) {
+		additionalLookup = kBBLMSymbolLookupClippings;
+		AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gTypesDict, kBBLMSymbolTypeLanguageKeyword);
+        AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gAttributesDict, kBBLMSymbolTypeMacro);
 	} else {
 		// Code (and everything else).
-		if (inLanguage == kErlangCodeLangType) {
+		if (inLanguage == kErlangCodeLangType || inLanguage == kErlangScriptFileLangType) {
 			additionalLookup = kBBLMSymbolLookupWordsInFrontWindow | kBBLMSymbolLookupClippings;
 			AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gFunctionsDict, kBBLMSymbolTypeFunction);
 			AddSymbols(ioParams.fInPartialSymbol, theCompletionArray, gAttributesDict, kBBLMSymbolTypeMacro);
@@ -1186,7 +1325,7 @@ static void CreateTextCompletionArray(bblmCreateCompletionArrayParams& ioParams,
 
 static void PredefinedNameLookup(bblmKeywordCFStringParams& ioParams, UInt32 inLanguage)
 {
-	if (inLanguage == kErlangCodeLangType) {
+	if (inLanguage == kErlangCodeLangType || inLanguage == kErlangScriptFileLangType) {
 		// Match the name against the function names.
 		// The set was built during initialization.
 		if (CFSetContainsValue(gPredefinedNames, ioParams.fToken))
@@ -1201,6 +1340,16 @@ static void PredefinedNameLookup(bblmKeywordCFStringParams& ioParams, UInt32 inL
 			ioParams.fKeywordMatched = true;
 		}
 	}
+}
+
+static void ResolveIncludeFile(bblmResolveIncludeFileNotInSDKYetParams& ioParams)
+{
+	// Just print the name for now.
+	char msg[256];
+	char name[256];
+	CFStringGetCString(ioParams.fName, name, sizeof(name), kCFStringEncodingUTF8);
+	sprintf(msg, "resolving %s", name);
+	DebugAssert(COMPONENT_SIGNATURE, DEBUG_NO_OPTIONS, "ErlangBBLM" ": " , msg, nil, __FILE__, __LINE__, 0);
 }
 
 extern "C"
@@ -1260,6 +1409,10 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 				params.fMapRunParams.fColorCode = kBBLMSGMLImageTagColor;
 				params.fMapRunParams.fMapped =	true;
 				break;
+            case kErlRunIsBuiltInType:
+                params.fMapRunParams.fColorCode = kBBLMPredefinedNameColor;
+                params.fMapRunParams.fMapped =	true;
+                break;
 			default:
 				params.fMapRunParams.fMapped =	false;
 			}
@@ -1343,6 +1496,14 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 		{
 			debugf("kBBLMMatchPredefinedNameMessage", NULL);
 		    PredefinedNameLookup(params.fMatchKeywordWithCFStringParams, params.fLanguage);
+			result = noErr;
+			break;
+		}
+		case kBBLMSupportsPredefinedNameLookupsNotInSDKYet:
+		{
+			debugf("kBBLMSupportsPredefinedNameLookupsNotInSDKYet", NULL);
+			bblmResolveIncludeFileNotInSDKYetParams* resolveParams = (bblmResolveIncludeFileNotInSDKYetParams*) &params.fFcnParams;
+			ResolveIncludeFile(*resolveParams);
 			result = noErr;
 			break;
 		}
