@@ -68,7 +68,7 @@ typedef struct
 
 #pragma options align=reset
 
-#define DEBUG 0
+#define DEBUG 1
 
 // DEBUGing macros
 #if DEBUG
@@ -276,6 +276,7 @@ static UniChar nextchar(struct runloc& r, BBLMTextIterator &p, BBLMParamBlock &p
 static bool addRun(BBLMRunCode kind, int  start,int len , const BBLMCallbackBlock& bblm_callbacks, UInt32 inLanguage)
 {
 	if (len > 0) { // Tie off the code run we were in, unless the length is zero.
+        debugf("bblmAddRun %i, %i, %i, false", kind, start, len);
 		return bblmAddRun(	&bblm_callbacks, inLanguage,
 							kind, start, len, false);
 							
@@ -558,11 +559,13 @@ static void CalculateRuns(BBLMParamBlock &pb,
 	}
 }
 
-static bool isCommentKind(BBLMRunCode kind)
+static bool isCommentOrTypeKind(BBLMRunCode kind)
 {
 	return (
 	    kind == kBBLMRunIsLineComment ||
-	    kind == kErlRunIsCommentTag);
+	    kind == kErlRunIsCommentTag ||
+        kind == kErlRunIsType ||
+        kind == kErlRunIsBuiltInType);
 }
 
 static void AdjustRange(BBLMParamBlock &params,
@@ -576,7 +579,7 @@ static void AdjustRange(BBLMParamBlock &params,
 	
 	while(	index > 0 &&
 			bblmGetRun(&callbacks, index, language, kind, charPos, length) &&
-			isCommentKind(kind)){
+			isCommentOrTypeKind(kind)){
 	 	index--;
 	};
 	params.fAdjustRangeParams.fStartIndex = index;
