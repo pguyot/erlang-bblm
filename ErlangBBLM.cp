@@ -68,7 +68,7 @@ typedef struct
 
 #pragma options align=reset
 
-#define DEBUG 1
+#define DEBUG 0
 
 // DEBUGing macros
 #if DEBUG
@@ -273,12 +273,11 @@ static UniChar nextchar(struct runloc& r, BBLMTextIterator &p, BBLMParamBlock &p
 	return 0;
 }
 
-static bool addRun(BBLMRunCode kind, int  start,int len , const BBLMCallbackBlock& bblm_callbacks, UInt32 inLanguage)
+static bool addRun(BBLMRunCode kind, int start, int len, const BBLMCallbackBlock& bblm_callbacks, UInt32 inLanguage, bool dontMerge=false)
 {
 	if (len > 0) { // Tie off the code run we were in, unless the length is zero.
-        debugf("bblmAddRun %i, %i, %i, false", kind, start, len);
 		return bblmAddRun(	&bblm_callbacks, inLanguage,
-							kind, start, len, false);
+							kind, start, len, dontMerge);
 							
 	}
 	else{
@@ -286,9 +285,9 @@ static bool addRun(BBLMRunCode kind, int  start,int len , const BBLMCallbackBloc
 	}
 }					
 
-static bool addRunAt(BBLMRunCode kind, struct runloc& r, const BBLMCallbackBlock& bblm_callbacks, UInt32 inLanguage, int off=0)
+static bool addRunAt(BBLMRunCode kind, struct runloc& r, const BBLMCallbackBlock& bblm_callbacks, UInt32 inLanguage, int off=0, bool dontMerge=false)
 {
-	bool more_runs = addRun(kind, r.last_start, r.pos - r.last_start+1+off, bblm_callbacks, inLanguage);
+	bool more_runs = addRun(kind, r.last_start, r.pos - r.last_start+1+off, bblm_callbacks, inLanguage, dontMerge);
 	r.last_start =  r.pos+1+off;
 	return more_runs;
 }
@@ -308,7 +307,7 @@ static bool colormacro(
 				BBLMTextIterator &p,
 				const BBLMCallbackBlock &bblm_callbacks)
 {
-	bool result = true;
+	bool more_runs = true;
 	UniChar c;
 	
 	UInt32 startChar = r.pos;
@@ -320,12 +319,12 @@ static bool colormacro(
 			UInt32 nameLen = r.pos - startChar - 1;
 			// Is it a macro?
 			if (isMacro(nameIter, nameLen, bblm_callbacks)) {
-				result = addRunAt(kErlRunIsMacroName, r, bblm_callbacks, pb.fLanguage, -1);
+				more_runs = addRunAt(kErlRunIsMacroName, r, bblm_callbacks, pb.fLanguage, -1);
 			}
 			break;
 		}
 	}
-	return result;
+	return more_runs;
 }
 
 // Color a string, i.e. define a run until the next " character.
@@ -336,12 +335,12 @@ static bool colorstr(
 				BBLMTextIterator &p,
 				const BBLMCallbackBlock &bblm_callbacks)
 {
-	bool result = true;
+	bool more_runs = true;
 	UniChar c;
 	
 	while ((c = nextchar(r, p, pb))) {
 		if (c == '"') {
-			result = addRunAt(kBBLMRunIsSingleString, r, bblm_callbacks, pb.fLanguage);
+			more_runs = addRunAt(kBBLMRunIsSingleString, r, bblm_callbacks, pb.fLanguage);
 			break;
 		}
         if (c=='\r'|| c=='\n'){
@@ -351,7 +350,7 @@ static bool colorstr(
 			nextchar(r, p, pb);
 		}
 	}
-	return result;
+	return more_runs;
 }
 
 // Color a comment, i.e. define a run until the next endline.
@@ -409,42 +408,39 @@ static bool colortype(
                      BBLMTextIterator &p,
                      const BBLMCallbackBlock &bblm_callbacks)
 {
-	bool result = true;
 	bool more_runs = true;
+    bool in_type = true;
 	UniChar c;
 	c = p[0];
     CFMutableStringRef candidateCFStr = CFStringCreateMutable(NULL, p.CharsLeft());
     bool inToken = false;
     
-    // Skip first token (typically the attribute name).
-    if (c == '-') {
-        do {
-            c = nextchar(r, p, pb);
-        } while (iswordchar(c));
-        more_runs = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage);
-    }
-	
-	while (c && more_runs)
+	while (c && more_runs && in_type)
 	{
         switch (c)
         {
             case '.':
-                result = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage);
-                more_runs = false;
+                more_runs = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage);
+                in_type = false;    // end of type.
                 break;
             case '(':
-                if (p[1] == ')') {
-                    CFStringAppend(candidateCFStr, CFSTR("()"));
-                    if (CFSetContainsValue(gNonParametrizedTypesSet, candidateCFStr)) {
-                        more_runs = addRunAt(kErlRunIsBuiltInType, r, bblm_callbacks, pb.fLanguage, 1);
-                        CFStringReplaceAll(candidateCFStr, CFSTR(""));
+                if (inToken) {
+                    if (p[1] == ')') {
+                        CFStringAppend(candidateCFStr, CFSTR("()"));
+                        if (CFSetContainsValue(gNonParametrizedTypesSet, candidateCFStr)) {
+                            (void) nextchar(r, p, pb);
+                            (void) addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage, -CFStringGetLength(candidateCFStr), true);
+                            more_runs = addRunAt(kErlRunIsBuiltInType, r, bblm_callbacks, pb.fLanguage);
+                            CFStringReplaceAll(candidateCFStr, CFSTR(""));
+                        }
+                    } else {
+                        if (CFSetContainsValue(gParametrizedTypesSet, candidateCFStr)) {
+                            (void) addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage, -CFStringGetLength(candidateCFStr) - 1, true);
+                            more_runs = addRunAt(kErlRunIsBuiltInType, r, bblm_callbacks, pb.fLanguage, -1);
+                        }
                     }
-                } else {
-                    if (CFSetContainsValue(gParametrizedTypesSet, candidateCFStr)) {
-                        more_runs = addRunAt(kErlRunIsBuiltInType, r, bblm_callbacks, pb.fLanguage, - 2);
-                    }
+                    inToken = false;
                 }
-                inToken = false;
                 break;
             case '%':
                 // This is a comment, for sure.
@@ -460,16 +456,16 @@ static bool colortype(
                 break;
             default:
                 // inToken transition.
-                if (iswordchar(c) || c == ':') {
+                if (iswordchar(c)) {
                     if (!inToken) {
-                        more_runs = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage, -1);
                         CFStringReplaceAll(candidateCFStr, CFSTR(""));
                         inToken = true;
                     }
                     CFStringAppendCharacters(candidateCFStr, &c, 1);
+                } else if (c == ':' && inToken) {
+                    CFStringAppendCharacters(candidateCFStr, &c, 1);
                 } else {
                     if (inToken) {
-                        more_runs = addRunAt(kErlRunIsType, r, bblm_callbacks, pb.fLanguage, -1);
                         inToken = false;
                     }
                 }
@@ -479,7 +475,7 @@ static bool colortype(
         }
 	}
     CFRelease(candidateCFStr);
-	return result;
+	return more_runs;
 }
 
 // Compute the runs for color.
