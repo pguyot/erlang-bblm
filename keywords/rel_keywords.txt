@@ -1,0 +1,7 @@
+erts
+load
+none
+permanent
+release
+temporary
+transient

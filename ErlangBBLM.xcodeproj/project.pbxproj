@@ -3,17 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E866DAB077236D900381A53 /* BBXTImplementationMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E866DA4077236D900381A53 /* BBXTImplementationMacros.h */; };
-		2E866DB9077236E700381A53 /* BBXTInterfaceStructsAndEnums.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E866DB2077236E700381A53 /* BBXTInterfaceStructsAndEnums.h */; };
 		5F35C49E05A096310030C7CA /* BBLMTextIterator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */; };
 		5F35C49F05A096310030C7CA /* BBLMInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */; };
-		5F35C4A005A096310030C7CA /* BBXTInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EADE3E7056EA159004A4EFC /* BBXTInterface.h */; };
-		5F35C4A305A096310030C7CA /* ErlangBBLM.cp in Sources */ = {isa = PBXBuildFile; fileRef = 2ED4605B05179C27006BE845 /* ErlangBBLM.cp */; };
-		5F35C4A505A096310030C7CA /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EADE3EB056EA181004A4EFC /* Carbon.framework */; };
+		5F35C4A305A096310030C7CA /* ErlangBBLM.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2ED4605B05179C27006BE845 /* ErlangBBLM.mm */; };
+		DA063DBE19FBC83D00F5CD84 /* app_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DB719FBC83D00F5CD84 /* app_keywords.txt */; };
+		DA063DBF19FBC83D00F5CD84 /* appup_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DB819FBC83D00F5CD84 /* appup_keywords.txt */; };
+		DA063DC019FBC83D00F5CD84 /* common_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DB919FBC83D00F5CD84 /* common_keywords.txt */; };
+		DA063DC119FBC83D00F5CD84 /* erl_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBA19FBC83D00F5CD84 /* erl_keywords.txt */; };
+		DA063DC219FBC83D00F5CD84 /* escript_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBB19FBC83D00F5CD84 /* escript_keywords.txt */; };
+		DA063DC319FBC83D00F5CD84 /* otp_applications.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBC19FBC83D00F5CD84 /* otp_applications.txt */; };
+		DA063DC419FBC83D00F5CD84 /* rel_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -28,15 +31,18 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
-		2E866DA4077236D900381A53 /* BBXTImplementationMacros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBXTImplementationMacros.h; path = "BBEdit SDK/Interfaces/Tools/BBXTImplementationMacros.h"; sourceTree = "<group>"; };
-		2E866DB2077236E700381A53 /* BBXTInterfaceStructsAndEnums.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBXTInterfaceStructsAndEnums.h; path = "BBEdit SDK/Interfaces/Tools/BBXTInterfaceStructsAndEnums.h"; sourceTree = "<group>"; };
 		2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMTextIterator.h; path = "BBEdit SDK/Interfaces/Language Modules/BBLMTextIterator.h"; sourceTree = "<group>"; };
 		2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMInterface.h; path = "BBEdit SDK/Interfaces/Language Modules/BBLMInterface.h"; sourceTree = "<group>"; };
-		2EADE3E7056EA159004A4EFC /* BBXTInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBXTInterface.h; path = "BBEdit SDK/Interfaces/Tools/BBXTInterface.h"; sourceTree = "<group>"; };
-		2EADE3EB056EA181004A4EFC /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		2ED4605B05179C27006BE845 /* ErlangBBLM.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ErlangBBLM.cp; sourceTree = "<group>"; };
+		2ED4605B05179C27006BE845 /* ErlangBBLM.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = ErlangBBLM.mm; sourceTree = "<group>"; };
 		5F35C4A805A096310030C7CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F35C4A905A096310030C7CA /* Erlang.bblm */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Erlang.bblm; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA063DB719FBC83D00F5CD84 /* app_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = app_keywords.txt; sourceTree = "<group>"; };
+		DA063DB819FBC83D00F5CD84 /* appup_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = appup_keywords.txt; sourceTree = "<group>"; };
+		DA063DB919FBC83D00F5CD84 /* common_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = common_keywords.txt; sourceTree = "<group>"; };
+		DA063DBA19FBC83D00F5CD84 /* erl_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = erl_keywords.txt; sourceTree = "<group>"; };
+		DA063DBB19FBC83D00F5CD84 /* escript_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = escript_keywords.txt; sourceTree = "<group>"; };
+		DA063DBC19FBC83D00F5CD84 /* otp_applications.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = otp_applications.txt; sourceTree = "<group>"; };
+		DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rel_keywords.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,7 +50,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F35C4A505A096310030C7CA /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,9 +59,9 @@
 		089C166AFE841209C02AAC07 /* Hello World */ = {
 			isa = PBXGroup;
 			children = (
+				DA063DB619FBC83D00F5CD84 /* keywords */,
 				08FB77ADFE841716C02AAC07 /* Source */,
 				2EADE40E056EA22B004A4EFC /* SDK Headers */,
-				2EADE3EB056EA181004A4EFC /* Carbon.framework */,
 				5F35C4A805A096310030C7CA /* Info.plist */,
 				5F35C4A905A096310030C7CA /* Erlang.bblm */,
 			);
@@ -66,7 +71,7 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				2ED4605B05179C27006BE845 /* ErlangBBLM.cp */,
+				2ED4605B05179C27006BE845 /* ErlangBBLM.mm */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -75,12 +80,23 @@
 			isa = PBXGroup;
 			children = (
 				2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */,
-				2E866DA4077236D900381A53 /* BBXTImplementationMacros.h */,
 				2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */,
-				2EADE3E7056EA159004A4EFC /* BBXTInterface.h */,
-				2E866DB2077236E700381A53 /* BBXTInterfaceStructsAndEnums.h */,
 			);
 			name = "SDK Headers";
+			sourceTree = "<group>";
+		};
+		DA063DB619FBC83D00F5CD84 /* keywords */ = {
+			isa = PBXGroup;
+			children = (
+				DA063DB719FBC83D00F5CD84 /* app_keywords.txt */,
+				DA063DB819FBC83D00F5CD84 /* appup_keywords.txt */,
+				DA063DB919FBC83D00F5CD84 /* common_keywords.txt */,
+				DA063DBA19FBC83D00F5CD84 /* erl_keywords.txt */,
+				DA063DBB19FBC83D00F5CD84 /* escript_keywords.txt */,
+				DA063DBC19FBC83D00F5CD84 /* otp_applications.txt */,
+				DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */,
+			);
+			path = keywords;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -92,9 +108,6 @@
 			files = (
 				5F35C49E05A096310030C7CA /* BBLMTextIterator.h in Headers */,
 				5F35C49F05A096310030C7CA /* BBLMInterface.h in Headers */,
-				5F35C4A005A096310030C7CA /* BBXTInterface.h in Headers */,
-				2E866DAB077236D900381A53 /* BBXTImplementationMacros.h in Headers */,
-				2E866DB9077236E700381A53 /* BBXTInterfaceStructsAndEnums.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,8 +140,11 @@
 /* Begin PBXProject section */
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+			};
 			buildConfigurationList = 2E4F91C208631638009D6578 /* Build configuration list for PBXProject "ErlangBBLM" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -149,6 +165,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA063DC219FBC83D00F5CD84 /* escript_keywords.txt in Resources */,
+				DA063DC419FBC83D00F5CD84 /* rel_keywords.txt in Resources */,
+				DA063DC119FBC83D00F5CD84 /* erl_keywords.txt in Resources */,
+				DA063DBE19FBC83D00F5CD84 /* app_keywords.txt in Resources */,
+				DA063DC319FBC83D00F5CD84 /* otp_applications.txt in Resources */,
+				DA063DC019FBC83D00F5CD84 /* common_keywords.txt in Resources */,
+				DA063DBF19FBC83D00F5CD84 /* appup_keywords.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,7 +192,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F35C4A305A096310030C7CA /* ErlangBBLM.cp in Sources */,
+				5F35C4A305A096310030C7CA /* ErlangBBLM.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +202,7 @@
 		2E4F91BF08631638009D6578 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -186,7 +210,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = 4.2;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
@@ -208,16 +232,13 @@
 		2E4F91C008631638009D6578 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = 4.2;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
@@ -239,10 +260,11 @@
 		2E4F91C108631638009D6578 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = 4.2;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
@@ -263,21 +285,24 @@
 		2E4F91C308631638009D6578 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Development;
 		};
 		2E4F91C408631638009D6578 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Deployment;
 		};
 		2E4F91C508631638009D6578 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Default;
 		};
