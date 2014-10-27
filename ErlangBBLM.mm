@@ -85,10 +85,12 @@ static OSErr Init()
 	OSErr result = noErr;
     NSBundle* myBundle = [NSBundle bundleWithIdentifier:BUNDLE_IDENTIFIER];
 	if (myBundle != nil) {
-		gAttributesDict = [[myBundle objectForInfoDictionaryKey: ATTRIBUTES_FOR_COMPLETION] retain];
-        gDocTagsDict = [[myBundle objectForInfoDictionaryKey: DOCTAGS_FOR_COMPLETION] retain];
-		gFunctionsDict = [[myBundle objectForInfoDictionaryKey: FUNCTIONS_FOR_COMPLETION] retain];
-        gTypesDict = [[myBundle objectForInfoDictionaryKey: TYPES_FOR_COMPLETION] retain];
+        NSString* completionPath = [myBundle pathForResource:@"Completion" ofType:@"plist"];
+        NSDictionary* completion = [NSDictionary dictionaryWithContentsOfFile:completionPath];
+		gAttributesDict = [[completion objectForKey: ATTRIBUTES_FOR_COMPLETION] retain];
+        gDocTagsDict = [[completion objectForKey: DOCTAGS_FOR_COMPLETION] retain];
+		gFunctionsDict = [[completion objectForKey: FUNCTIONS_FOR_COMPLETION] retain];
+        gTypesDict = [[completion objectForKey: TYPES_FOR_COMPLETION] retain];
 
 		if (gFunctionsDict != NULL)
 		{

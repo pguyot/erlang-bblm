@@ -17,6 +17,7 @@
 		DA063DC219FBC83D00F5CD84 /* escript_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBB19FBC83D00F5CD84 /* escript_keywords.txt */; };
 		DA063DC319FBC83D00F5CD84 /* otp_applications.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBC19FBC83D00F5CD84 /* otp_applications.txt */; };
 		DA063DC419FBC83D00F5CD84 /* rel_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */; };
+		DA063DD919FE1D3E00F5CD84 /* Completion.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA063DD819FE1D3E00F5CD84 /* Completion.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -43,6 +44,7 @@
 		DA063DBB19FBC83D00F5CD84 /* escript_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = escript_keywords.txt; sourceTree = "<group>"; };
 		DA063DBC19FBC83D00F5CD84 /* otp_applications.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = otp_applications.txt; sourceTree = "<group>"; };
 		DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rel_keywords.txt; sourceTree = "<group>"; };
+		DA063DD819FE1D3E00F5CD84 /* Completion.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Completion.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				08FB77ADFE841716C02AAC07 /* Source */,
 				2EADE40E056EA22B004A4EFC /* SDK Headers */,
 				5F35C4A805A096310030C7CA /* Info.plist */,
+				DA063DD819FE1D3E00F5CD84 /* Completion.plist */,
 				5F35C4A905A096310030C7CA /* Erlang.bblm */,
 			);
 			name = "Hello World";
@@ -169,6 +172,7 @@
 				DA063DC419FBC83D00F5CD84 /* rel_keywords.txt in Resources */,
 				DA063DC119FBC83D00F5CD84 /* erl_keywords.txt in Resources */,
 				DA063DBE19FBC83D00F5CD84 /* app_keywords.txt in Resources */,
+				DA063DD919FE1D3E00F5CD84 /* Completion.plist in Resources */,
 				DA063DC319FBC83D00F5CD84 /* otp_applications.txt in Resources */,
 				DA063DC019FBC83D00F5CD84 /* common_keywords.txt in Resources */,
 				DA063DBF19FBC83D00F5CD84 /* appup_keywords.txt in Resources */,
