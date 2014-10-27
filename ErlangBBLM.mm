@@ -598,12 +598,12 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
 	
     // We are looking for the first param start.
 	while (state == kMatchAtomPBeforeFirstParamStart) {
-		startLine = false;
 		theChar = inIter.GetNextChar();
 		if (theChar == 0) {
 			state = kMatchAtomPUnmatch;
+            startLine = false;
 		} else if (isspace(theChar)) {
-		    // startLine = false;
+		    startLine = false;
         } else if (theChar == '%') {
             eat_line(inIter);
 			startLine = true;
@@ -617,23 +617,27 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
             } else {
                 parenthesisCount--;
             }
+            startLine = false;
 		} else if (startLine) {
 			state = kMatchAtomPUnmatch;
+            startLine = false;
 		} else if (theChar == ',') {
 			state = kMatchAtomPUnmatch;
+            startLine = false;
 		} else {
 		    inIter--;
 		    theFirstParamStart = inIter.Offset();
 			state = kMatchAtomPBeforeFirstParamEnd;
+            startLine = false;
         }
 	}
 
     // We are looking for the first param end.
 	while (state == kMatchAtomPBeforeFirstParamEnd) {
-		startLine = false;
 		theChar = inIter.GetNextChar();
 		if (theChar == 0) {
 			state = kMatchAtomPUnmatch;
+            startLine = false;
         } else if (theChar == '%') {
             eat_line(inIter);
 			startLine = true;
@@ -647,28 +651,36 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
             } else {
                 parenthesisCount--;
             }
+            startLine = false;
         } else if (theChar == '[') {
             bracketsCount++;
+            startLine = false;
         } else if (theChar == ']') {
             bracketsCount--;
             if (bracketsCount < 0) {
                 state = kMatchAtomPUnmatch;
             }
+            startLine = false;
         } else if (theChar == '{') {
             accoladeCount++;
+            startLine = false;
         } else if (theChar == '}') {
             accoladeCount--;
             if (accoladeCount < 0) {
                 state = kMatchAtomPUnmatch;
             }
+            startLine = false;
         } else if (theChar == '(') {
             parenthesisCount++;
+            startLine = false;
 		} else if (startLine) {
 			state = kMatchAtomPUnmatch;
+            startLine = false;
 		} else if ((parenthesisCount == 0) && (bracketsCount == 0) && (accoladeCount == 0) && (isspace(theChar) || theChar == ',')) {
 		    inIter--;
 		    theFirstParamEnd = inIter.Offset();
 			state = kMatchAtomPInsideParentheses;
+            startLine = false;
         }
 	}
 
@@ -676,12 +688,13 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
 	// If a line starts with a non space character, we give up. Usually, this
 	// means this is no function/attribute definition.
 	while (state == kMatchAtomPInsideParentheses) {
-		startLine = false;
 		theChar = inIter.GetNextChar();
 		if (theChar == 0) {
 			state = kMatchAtomPUnmatch;
+            startLine = false;
 		} else if (theChar == '(') {
 			parenthesisCount++;
+            startLine = false;
 		} else if (theChar == ')') {
 			if (parenthesisCount == 0) {
 				state = kMatchAtomPClosingParenthesis;
@@ -689,26 +702,33 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
 			} else {
 				parenthesisCount--;
 			}
+            startLine = false;
         } else if (theChar == '[') {
             bracketsCount++;
+            startLine = false;
         } else if (theChar == ']') {
             bracketsCount--;
             if (bracketsCount < 0) {
                 state = kMatchAtomPUnmatch;
             }
+            startLine = false;
         } else if (theChar == '{') {
             accoladeCount++;
+            startLine = false;
         } else if (theChar == '}') {
             accoladeCount--;
             if (accoladeCount < 0) {
                 state = kMatchAtomPUnmatch;
             }
+            startLine = false;
 		} else if (theChar == '"') {
 			eat_str(inIter);
+            startLine = false;
 		} else if (theChar == ',') {
 			if ((parenthesisCount == 0) && (bracketsCount == 0) && (accoladeCount == 0)) {
 				theNbArgs++;
 			}
+            startLine = false;
 		} else if (theChar == '%') {
 			eat_line(inIter);
 			startLine = true;
@@ -716,6 +736,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
 			startLine = true;
 		} else if (startLine && !isspace(theChar)) {
 			state = kMatchAtomPUnmatch;
+            startLine = false;
 		}
 	}
 	
@@ -827,7 +848,6 @@ static OSErr addAttribute(UInt32 attrStart, UInt32 attrEnd, UInt32 firstParamSta
 		} else if (theKind == kBBLMTypedef || theKind == kErlSpecAttr) {
 			// Build our own name.
 			UInt32 attrLen = namelen;
-			namelen += paramLen + 2;
 			UInt32 indexCopy;
 			for (indexCopy = 0; indexCopy < attrLen; indexCopy++)
 			{
