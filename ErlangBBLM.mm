@@ -53,23 +53,7 @@
 #define kErlangReleaseResourceFileLangType 'ErlR'
 #define kErlangScriptFileLangType 'ErlS'
 
-#define DEBUG 0
 
-// DEBUGing macros
-#if DEBUG
-void debugf_(const char* func,const char* fileName,long line, const char*fmt,...)
-{
-	va_list arg;
-	char msg[256];
-	va_start(arg, fmt);
-	vsnprintf(msg,256 ,fmt, arg);
-    DebugAssert(COMPONENT_SIGNATURE, DEBUG_NO_OPTIONS, "ErlangBBLM" ": " , msg, nil, fileName, line, 0 );
-
-}
-#define debugf(FMT,...)  debugf_( __FUNCTION__,__FILE__, __LINE__,FMT,__VA_ARGS__);
-#else
-#define debugf(FMT,...) 
-#endif
 
 NSArray* gAttributesDict = NULL;
 NSArray* gFunctionsDict = NULL;
@@ -125,7 +109,6 @@ static OSErr Init()
 		}
 	} else {
 		result = fnfErr;
-		debugf("CANNOT GET BUNDLE", NULL);
 	}
 	
 	return result;
@@ -800,7 +783,6 @@ static bool match_clause(BBLMTextIterator& inIter, UInt32* outAtomStart, UInt32*
 
 static OSErr addAttribute(UInt32 attrStart, UInt32 attrEnd, UInt32 firstParamStart, UInt32 firstParamEnd, UInt32 paramEnd, BBLMParamBlock &pb, const BBLMCallbackBlock &bblm_callbacks)
 {
-	debugf("addAttribute(%i, %i)", attrStart, attrEnd);
 	OSErr err = noErr;
 	UInt32 offset = 0;
 	UInt32 namelen = attrEnd - attrStart;
@@ -1100,7 +1082,6 @@ static void ScanForFunctions(BBLMParamBlock& pb,
                         if (!sameFunction) {
                             // Add the function.
                             if (firstClauseAtomEnd > 0) {
-								debugf("addFunction(%i, %i, %i, %i) [1]", firstClauseAtomStart, firstClauseAtomEnd, firstClauseParamEnd, functionEnd);
                                 addFunction(firstClauseAtomStart, firstClauseAtomEnd, firstClauseParamEnd, functionEnd, firstClauseNbArgs, pb, bblm_callbacks);
                             }
 
@@ -1121,7 +1102,6 @@ static void ScanForFunctions(BBLMParamBlock& pb,
 
     // Add the last function.
     if (firstClauseAtomEnd > 0) {
-		debugf("addFunction(%i, %i, %i, %i) [2]", firstClauseAtomStart, firstClauseAtomEnd, firstClauseParamEnd, functionEnd);
         addFunction(firstClauseAtomStart, firstClauseAtomEnd, firstClauseParamEnd, functionEnd, firstClauseNbArgs, pb, bblm_callbacks);
     }
 }
@@ -1148,9 +1128,6 @@ static void AdjustRangeForTextCompletion(BBLMParamBlock &pb, bblmAdjustCompletio
 
 	NSString* theKind = ioParams.fInCompletionRangeStartRun.runKind;
 
-	debugf("AdjustRangeForTextCompletion, run language = %.8X, run kind = %i", ioParams.fInCompletionRangeStartRun.language, theKind);
-	debugf("AdjustRangeForTextCompletion, run startPos = %i, run length = %i", ioParams.fInCompletionRangeStartRun.startPos, ioParams.fInProposedCompletionRange.length);
-	
     if ([kErlCommentTagRunKind isEqualToString: theKind] || [kBBLMCommentRunKind isEqualToString: theKind])
 	{
 		// For comment ranges, we want to allow '@xxx' completion, but '@' isn't
@@ -1275,56 +1252,47 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 	switch (params.fMessage)
 	{
 		case kBBLMInitMessage:
-			debugf("Init. Version = %i", params.fVersion);
 			result = Init();
 			break;
 		
 		case kBBLMDisposeMessage:
-			debugf("kBBLMDisposeMessage", NULL);
 			Dispose();
 			result = noErr;
 			break;
 		
 		case kBBLMCalculateRunsMessage:
-			debugf("kBBLMCalculateRunsMessage", NULL);
 			CalculateRuns(params, bblm_callbacks);
 			result = noErr;
 			break;
 
 		case kBBLMScanForFunctionsMessage:
-			debugf("kBBLMScanForFunctionsMessage", NULL);
 			ScanForFunctions(params, bblm_callbacks);
 			result = noErr;
 			break;
 
 		case kBBLMAdjustRangeMessage:
-			debugf("kBBLMAdjustRangeMessage", NULL);
 			AdjustRange(params, bblm_callbacks);
 			result = noErr;
 			break;
 
 		case kBBLMEscapeStringMessage:
 		{
-			debugf("kBBLMEscapeStringMessage", NULL);
 			result = userCanceledErr;
 			break;
 		}
 		case kBBLMAdjustEndMessage:
 		{
-			debugf("kBBLMAdjustEndMessage (offset = %i)", params.fAdjustEndParams.fEndOffset);
 			result = noErr;
 			break;
 		}
 		case kBBLMGuessLanguageMessage:
 		{
-			debugf("kBBLMGuessLanguageMessage", NULL);
 			result = userCanceledErr;
 			break;
 		}
 
 		case kBBLMSetCategoriesMessage:
 		{
-			debugf("kBBLMSetCategoriesMessage", NULL);
 		    SetCategories(params.fCategoryParams.fCategoryTable);
 		    result = noErr;
 		    break;
@@ -1332,35 +1300,30 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 
         case kBBLMAdjustRangeForTextCompletion:
 		{
-			debugf("kBBLMAdjustRangeForTextCompletion", NULL);
 			AdjustRangeForTextCompletion(params, params.fAdjustCompletionRangeParams);
             result = noErr;
             break;
         }
 		case kBBLMSetCategoriesForTextCompletionMessage:
 		{
-			debugf("kBBLMSetCategoriesForTextCompletionMessage", NULL);
 		    SetCategoryTableForTextCompletion(params.fCategoryParams.fCategoryTable);
 		    result = noErr;
 		    break;
 		}
 		case kBBLMCreateTextCompletionArray:
 		{
-			debugf("kBBLMCreateTextCompletionArray", NULL);
 			CreateTextCompletionArray(params.fCreateCompletionArrayParams, params.fLanguage);
 			result = noErr;
 			break;
 		}
 		case kBBLMRunKindForWordMessage:
 		{
-			debugf("kBBLMRunKindForWordMessage", NULL);
 		    RunKindForWordMessage(params.fWordLookupParams, params.fLanguage);
 			result = noErr;
 			break;
 		}
 		case kBBLMResolveIncludeFileMessage:
 		{
-			debugf("kBBLMResolveIncludeFileMessage", NULL);
             ResolveIncludeFile(params.fResolveIncludeParams);
 			result = noErr;
 			break;
@@ -1368,7 +1331,6 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 		
 		default:
 		{
-			debugf("Unknown message = %i", params.fMessage);
 			result = paramErr;
 			break;
 		}
