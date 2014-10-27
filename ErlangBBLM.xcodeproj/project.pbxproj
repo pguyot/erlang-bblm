@@ -17,6 +17,8 @@
 		DA063DC219FBC83D00F5CD84 /* escript_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBB19FBC83D00F5CD84 /* escript_keywords.txt */; };
 		DA063DC319FBC83D00F5CD84 /* otp_applications.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBC19FBC83D00F5CD84 /* otp_applications.txt */; };
 		DA063DC419FBC83D00F5CD84 /* rel_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */; };
+		DA063DD019FD53FA00F5CD84 /* ErlangBBLMTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA063DCF19FD53FA00F5CD84 /* ErlangBBLMTests.mm */; };
+		DA063DD719FD694E00F5CD84 /* ErlangBBLM.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2ED4605B05179C27006BE845 /* ErlangBBLM.mm */; };
 		DA063DD919FE1D3E00F5CD84 /* Completion.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA063DD819FE1D3E00F5CD84 /* Completion.plist */; };
 /* End PBXBuildFile section */
 
@@ -44,11 +46,22 @@
 		DA063DBB19FBC83D00F5CD84 /* escript_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = escript_keywords.txt; sourceTree = "<group>"; };
 		DA063DBC19FBC83D00F5CD84 /* otp_applications.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = otp_applications.txt; sourceTree = "<group>"; };
 		DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rel_keywords.txt; sourceTree = "<group>"; };
+		DA063DCB19FD53FA00F5CD84 /* ErlangBBLMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ErlangBBLMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA063DCE19FD53FA00F5CD84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA063DCF19FD53FA00F5CD84 /* ErlangBBLMTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ErlangBBLMTests.mm; sourceTree = "<group>"; };
+		DA063DD519FD669C00F5CD84 /* ErlangBBLM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ErlangBBLM.h; sourceTree = "<group>"; };
 		DA063DD819FE1D3E00F5CD84 /* Completion.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Completion.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		5F35C4A405A096310030C7CA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA063DC819FD53FA00F5CD84 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -67,6 +80,8 @@
 				5F35C4A805A096310030C7CA /* Info.plist */,
 				DA063DD819FE1D3E00F5CD84 /* Completion.plist */,
 				5F35C4A905A096310030C7CA /* Erlang.bblm */,
+				DA063DCB19FD53FA00F5CD84 /* ErlangBBLMTests.xctest */,
+				DA063DCC19FD53FA00F5CD84 /* Tests */,
 			);
 			name = "Hello World";
 			sourceTree = "<group>";
@@ -75,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				2ED4605B05179C27006BE845 /* ErlangBBLM.mm */,
+				DA063DD519FD669C00F5CD84 /* ErlangBBLM.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -100,6 +116,23 @@
 				DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */,
 			);
 			path = keywords;
+			sourceTree = "<group>";
+		};
+		DA063DCC19FD53FA00F5CD84 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				DA063DCF19FD53FA00F5CD84 /* ErlangBBLMTests.mm */,
+				DA063DCD19FD53FA00F5CD84 /* Supporting Files */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		DA063DCD19FD53FA00F5CD84 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DA063DCE19FD53FA00F5CD84 /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,6 +171,23 @@
 			productReference = 5F35C4A905A096310030C7CA /* Erlang.bblm */;
 			productType = "com.apple.product-type.bundle";
 		};
+		DA063DCA19FD53FA00F5CD84 /* ErlangBBLMTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA063DD119FD53FA00F5CD84 /* Build configuration list for PBXNativeTarget "ErlangBBLMTests" */;
+			buildPhases = (
+				DA063DC719FD53FA00F5CD84 /* Sources */,
+				DA063DC819FD53FA00F5CD84 /* Frameworks */,
+				DA063DC919FD53FA00F5CD84 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ErlangBBLMTests;
+			productName = ErlangBBLMTests;
+			productReference = DA063DCB19FD53FA00F5CD84 /* ErlangBBLMTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -145,6 +195,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0610;
+				TargetAttributes = {
+					DA063DCA19FD53FA00F5CD84 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
 			};
 			buildConfigurationList = 2E4F91C208631638009D6578 /* Build configuration list for PBXProject "ErlangBBLM" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -159,6 +214,7 @@
 			projectRoot = "";
 			targets = (
 				5F35C49C05A096310030C7CA /* Erlang */,
+				DA063DCA19FD53FA00F5CD84 /* ErlangBBLMTests */,
 			);
 		};
 /* End PBXProject section */
@@ -176,6 +232,13 @@
 				DA063DC319FBC83D00F5CD84 /* otp_applications.txt in Resources */,
 				DA063DC019FBC83D00F5CD84 /* common_keywords.txt in Resources */,
 				DA063DBF19FBC83D00F5CD84 /* appup_keywords.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA063DC919FD53FA00F5CD84 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +260,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F35C4A305A096310030C7CA /* ErlangBBLM.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA063DC719FD53FA00F5CD84 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA063DD019FD53FA00F5CD84 /* ErlangBBLMTests.mm in Sources */,
+				DA063DD719FD694E00F5CD84 /* ErlangBBLM.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +382,135 @@
 			};
 			name = Default;
 		};
+		DA063DD219FD53FA00F5CD84 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Development;
+		};
+		DA063DD319FD53FA00F5CD84 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Deployment;
+		};
+		DA063DD419FD53FA00F5CD84 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Default;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -329,6 +530,16 @@
 				2E4F91C308631638009D6578 /* Development */,
 				2E4F91C408631638009D6578 /* Deployment */,
 				2E4F91C508631638009D6578 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		DA063DD119FD53FA00F5CD84 /* Build configuration list for PBXNativeTarget "ErlangBBLMTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA063DD219FD53FA00F5CD84 /* Development */,
+				DA063DD319FD53FA00F5CD84 /* Deployment */,
+				DA063DD419FD53FA00F5CD84 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;

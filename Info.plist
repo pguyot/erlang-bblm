@@ -39,6 +39,8 @@
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
 			<true/>
+			<key>BBLMCanResolveIncludeFiles</key>
+			<true/>
 			<key>BBLMKeywords</key>
 			<array>
 				<dict>
@@ -126,6 +128,8 @@
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
 			<true/>
+			<key>BBLMCanResolveIncludeFiles</key>
+			<true/>
 			<key>BBLMKeywords</key>
 			<array>
 				<dict>
@@ -185,6 +189,8 @@
 			<key>BBLMFunctionScannerDoesFoldsToo</key>
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
+			<true/>
+			<key>BBLMCanResolveIncludeFiles</key>
 			<true/>
 			<key>BBLMKeywords</key>
 			<array>
@@ -246,6 +252,8 @@
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
 			<true/>
+			<key>BBLMCanResolveIncludeFiles</key>
+			<true/>
 			<key>BBLMKeywords</key>
 			<array>
 				<dict>
@@ -305,6 +313,8 @@
 			<key>BBLMFunctionScannerDoesFoldsToo</key>
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
+			<true/>
+			<key>BBLMCanResolveIncludeFiles</key>
 			<true/>
 			<key>BBLMKeywords</key>
 			<array>

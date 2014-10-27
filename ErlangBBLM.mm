@@ -41,19 +41,9 @@
 #include "BBEdit SDK/Interfaces/Language Modules/BBLMInterface.h"
 #include "BBEdit SDK/Interfaces/Language Modules/BBLMTextIterator.h"
 
-#define BUNDLE_IDENTIFIER			@"com.semiocast.bblm.erlang"
-#define ATTRIBUTES_FOR_COMPLETION	@"ErlangAttributesForCompletion"
-#define DOCTAGS_FOR_COMPLETION		@"ErlangDocTagsForCompletion"
-#define FUNCTIONS_FOR_COMPLETION	@"ErlangFunctionsForCompletion"
-#define TYPES_FOR_COMPLETION        @"ErlangTypesForCompletion"
+#include "ErlangBBLM.h"
 
-#define kErlangCodeLangType 'Erlg'
-#define kErlangApplicationResourceFileLangType 'ErlA'
-#define kErlangApplicationUpgradeFileLangType 'ErlU'
-#define kErlangReleaseResourceFileLangType 'ErlR'
-#define kErlangScriptFileLangType 'ErlS'
-
-
+namespace com_semiocast_bblm_erlang {
 
 NSArray* gAttributesDict = NULL;
 NSArray* gFunctionsDict = NULL;
@@ -64,8 +54,8 @@ NSSet* gParametrizedTypesSet = NULL;
 
 NSSet* gPredefinedNames = NULL;
 
-static OSErr Init()
-{
+static
+OSErr Init() {
 	OSErr result = noErr;
     NSBundle* myBundle = [NSBundle bundleWithIdentifier:BUNDLE_IDENTIFIER];
 	if (myBundle != nil) {
@@ -927,9 +917,8 @@ static void addFunction(UInt32 atomStart, UInt32 atomEnd, UInt32 paramEnd, UInt3
     }
     indexName--;
     
-	OSErr err;
 	UInt32 offset = 0;
-	err = bblmAddTokenToBuffer(	&bblm_callbacks, 
+	(void) bblmAddTokenToBuffer(	&bblm_callbacks,
 								pb.fFcnParams.fTokenBuffer,
 								theName,
 								indexName,
@@ -966,9 +955,8 @@ static void addCallout(UInt32 startCallout, UInt32 startText, UInt32 endText, UI
 	BBLMTextIterator	nameIter(text, startCallout);
 	UInt32 namelen = endText - startCallout;
 
-	OSErr err;
 	UInt32 offset = 0;
-	err = bblmAddTokenToBuffer(	&bblm_callbacks, 
+	(void) bblmAddTokenToBuffer(	&bblm_callbacks,
 								pb.fFcnParams.fTokenBuffer,
 								nameIter.Address(),
 								namelen,
@@ -1250,10 +1238,262 @@ static void RunKindForWordMessage(bblmWordLookupParams& ioParams, UInt32 inLangu
 		}
 	}
 }
-
-static void ResolveIncludeFile(bblmResolveIncludeParams& ioParams) {
-	NSLog(@"ErlangBBLM resolving %@ within %@", ioParams.fInDocumentURL, ioParams.fInIncludeFileString);
+ 
+// http://erlang.org/doc/reference_manual/data_types.html#id69286
+unichar EscapeChar(unichar c) {
+    unichar r;
+    switch (c) {
+        case 'b':
+            r = '\b';
+            break;
+        case 'd':
+            r = 127; // DEL
+            break;
+        case 'e':
+            r = '\e';
+            break;
+        case 'f':
+            r = '\f';
+            break;
+        case 'n':
+            r = '\n';
+            break;
+        case 'r':
+            r = '\r';
+            break;
+        case 's':
+            r = ' ';
+            break;
+        case 't':
+            r = '\t';
+            break;
+        case 'v':
+            r = '\v';
+            break;
+/*
+    // UNIMPLEMENTED
+            \XYZ, \YZ, \Z	character with octal representation XYZ, YZ or Z
+            \xXY	character with hexadecimal representation XY
+            \x{X...}	character with hexadecimal representation; X... is one or more hexadecimal characters
+            \^a...\^z 
+            \^A...\^Z	control A to control Z
+*/
+        default:
+//          \'	single quote
+//          \"	double quote
+//          \\	backslash
+            r = c;
+    }
+    return r;
 }
+
+NSString* ParseErlangString(NSString* expression) {
+    NSString* result = nil;
+    NSUInteger exprLen = [expression length];
+    if (exprLen >= 2) {
+        if ([expression characterAtIndex:0] == '"' && [expression characterAtIndex: exprLen - 1] == '"') {
+            NSUInteger indexEnd = [expression length] - 1;
+            NSUInteger len = indexEnd - 1;
+            NSUInteger indexExpr;
+            NSUInteger indexBuffer;
+            unichar* strBuffer = (unichar*) malloc(sizeof(unichar) * len);
+            for (indexBuffer = 0, indexExpr = 1; indexExpr < indexEnd; indexExpr++, indexBuffer++) {
+                unichar c = [expression characterAtIndex:indexExpr];
+                if (c == '\\') {
+                    indexExpr++;
+                    len--;
+                    c = [expression characterAtIndex:indexExpr];
+                    strBuffer[indexBuffer] = EscapeChar(c);
+                } else {
+                    strBuffer[indexBuffer] = c;
+                }
+            }
+            result = [NSString stringWithCharacters:strBuffer length:len];
+            free(strBuffer);
+        } else if ([expression characterAtIndex:0] == '[') {
+            NSScanner* scanner = [NSScanner scannerWithString:expression];
+            // Skip leading bracket
+            unichar* strBuffer = (unichar*) malloc(sizeof(unichar) * (exprLen - 2) / 2);
+            NSUInteger len = 0;
+            [scanner scanString:@"[" intoString:nil];
+            while (true) {
+                int c;
+                BOOL r = [scanner scanInt:&c];
+                if (r == NO) {
+                    // Expect the end bracket.
+                    r = [scanner scanString: @"]" intoString: nil];
+                    if (r == YES) {
+                        result = [NSString stringWithCharacters:strBuffer length:len];
+                        free(strBuffer);
+                    }
+                    break;
+                }
+                strBuffer[len] = c;
+                len++;
+                [scanner scanString: @"," intoString: nil];
+            }
+            
+        }
+    }
+    return result;
+}
+
+///
+/// Try to eval an Erlang expression, get the result.
+/// The result is serialized with io:format("~p", [Expr]).
+/// Instead of passing expression on command line (using -eval argument), we get Erlang VM to parse stdin.
+/// This avoids parametrized text passed to /bin/sh
+///
+#define ERL_EVAL_COMMAND_LINE @"erl -eval 'error_logger:tty(false), {ok, Expr, _} = io:parse_erl_exprs([]), Result = (catch begin {value, R, _} = erl_eval:exprs(Expr, []), R end), io:format(\"~p\", [Result]), init:stop().' -noshell"
+
+NSString* EvalErlang(NSString* expression) {
+    NSPipe* stdoutPipe = [NSPipe pipe];
+    NSFileHandle* stdoutFile = stdoutPipe.fileHandleForReading;
+    NSPipe* stdinPipe = [NSPipe pipe];
+    NSFileHandle* stdinFile = stdinPipe.fileHandleForWriting;
+    
+    NSTask *task = [NSTask new];
+    NSDictionary *environmentDict = [[NSProcessInfo processInfo] environment];
+    NSString *shellString = [environmentDict objectForKey:@"SHELL"];
+    task.launchPath = shellString;
+    task.arguments = @[@"-c", ERL_EVAL_COMMAND_LINE];
+    
+    task.standardOutput = stdoutPipe;
+    task.standardInput = stdinPipe;
+    [task launch];
+    [stdinFile writeData:[expression dataUsingEncoding:NSUTF8StringEncoding]];
+    [stdinFile closeFile];
+    NSData *data = [stdoutFile readDataToEndOfFile];
+    [stdoutFile closeFile];
+    NSString* output = [[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding] autorelease];
+    return output;
+}
+
+///
+/// Get the path of an application asking erlang directly.
+/// We maintain a cache.
+///
+NSMutableDictionary* gSystemApplications = nil;
+
+static
+NSString* FindSystemApplication(NSString* applicationName) {
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    BOOL isDir;
+    NSString* cached = nil;
+    if (gSystemApplications) {
+        cached = [gSystemApplications objectForKey:applicationName];
+        if (cached) {
+            if ([fileManager fileExistsAtPath:cached isDirectory:&isDir] && isDir) {
+                return cached;
+            } else {
+                [gSystemApplications removeObjectForKey:applicationName];
+            }
+        }
+    }
+    
+    NSString* output = EvalErlang([NSString stringWithFormat: @"code:lib_dir(%@).", applicationName]);
+    if (output != nil) {
+        NSString* path = ParseErlangString(output);
+        if ([fileManager fileExistsAtPath:path isDirectory:&isDir] && isDir) {
+            if (gSystemApplications == nil) {
+                gSystemApplications = [NSMutableDictionary new];
+            }
+            [gSystemApplications setObject:path forKey:applicationName];
+            return path;
+        }
+    }
+    return nil;
+}
+
+///
+/// Recursively look for the following patterns
+/// target/lib (erl_make)
+/// deps (rebar)
+/// <application name>
+///
+static
+NSString* FindDepsDir(NSString* documentDir, NSString* applicationName) {
+    NSString* dirName = documentDir;
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    while (![@"/" isEqualToString: dirName]) {
+        BOOL isDir;
+        NSString* candidate = [[dirName stringByAppendingPathComponent:@"target"] stringByAppendingPathComponent:@"lib"];
+        if ([fileManager fileExistsAtPath:candidate isDirectory:&isDir] && isDir) {
+            return candidate;
+        }
+        candidate = [dirName stringByAppendingPathComponent:@"deps"];
+        if ([fileManager fileExistsAtPath:candidate isDirectory:&isDir] && isDir) {
+            return candidate;
+        }
+        NSString* appCandidate = [dirName stringByAppendingPathComponent:applicationName];
+        if ([fileManager fileExistsAtPath:appCandidate isDirectory:&isDir] && isDir) {
+            return dirName;
+        }
+        dirName = [dirName stringByDeletingLastPathComponent];
+    }
+    return nil;
+}
+
+
+NSDictionary* gApplications = nil;
+
+static
+NSString* FindApplication(NSString* documentDir, NSString* applicationName) {
+    NSString* depsDir = FindDepsDir(documentDir, applicationName);
+    if (depsDir != nil) {
+        NSDirectoryEnumerator* direnum = [[NSFileManager defaultManager] enumeratorAtPath:depsDir];
+        NSString* applicationNameAndHyphen = [applicationName stringByAppendingString:@"-"];
+        NSString *filename;
+        while ((filename = [direnum nextObject] )) {
+            if ([filename isEqualToString:applicationName] || [filename hasPrefix:applicationNameAndHyphen]) {
+                return [depsDir stringByAppendingPathComponent:filename];
+            }
+        }
+    }
+    return FindSystemApplication(applicationName);
+}
+
+static
+void CreateResolveIncludeFile(bblmResolveIncludeParams& ioParams) {
+    NSString* documentDir = [[(NSURL*)ioParams.fInDocumentURL path] stringByDeletingLastPathComponent];
+    NSString* candidate = [documentDir stringByAppendingPathComponent:(NSString*)ioParams.fInIncludeFileString];
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    do {
+        if ([fileManager fileExistsAtPath: candidate]) {
+            ioParams.fOutIncludedItemURL = (CFURLRef) [[NSURL fileURLWithPath: candidate] retain];
+            break;
+        }
+        candidate = [[[documentDir stringByDeletingLastPathComponent] stringByAppendingPathComponent: @"include"]stringByAppendingPathComponent:(NSString*)ioParams.fInIncludeFileString];
+        if ([fileManager fileExistsAtPath: candidate]) {
+            ioParams.fOutIncludedItemURL = (CFURLRef) [[NSURL fileURLWithPath: candidate] retain];
+            break;
+        }
+        NSArray* pathComponents = [(NSString*)ioParams.fInIncludeFileString pathComponents];
+        if ([pathComponents count] >= 3 && [@"include" isEqualToString:[pathComponents objectAtIndex:1]]) {
+            NSString* applicationName = [pathComponents objectAtIndex:0];
+            NSString* applicationPath = FindApplication(documentDir, applicationName);
+            if (applicationPath != nil) {
+                candidate = applicationPath;
+                BOOL firstElement = YES;
+                for (NSString* component in pathComponents) {
+                    if (firstElement) {
+                        firstElement = NO;
+                    } else {
+                        candidate = [candidate stringByAppendingPathComponent:component];
+                    }
+                }
+                if ([fileManager fileExistsAtPath: candidate]) {
+                    ioParams.fOutIncludedItemURL = (CFURLRef) [[NSURL fileURLWithPath: candidate] retain];
+                    break;
+                }
+            }
+        }
+    } while (false);
+}
+    
+}
+
+using namespace com_semiocast_bblm_erlang;
 
 extern "C"
 {
@@ -1344,7 +1584,7 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 		}
 		case kBBLMResolveIncludeFileMessage:
 		{
-            ResolveIncludeFile(params.fResolveIncludeParams);
+            CreateResolveIncludeFile(params.fResolveIncludeParams);
 			result = noErr;
 			break;
 		}
