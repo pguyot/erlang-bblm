@@ -1,11 +1,9 @@
-Erlang Language Module for BBEdit v1.3, (2014/10/27) [![Build Status](https://travis-ci.org/pguyot/erlang-bblm.png)](https://travis-ci.org/pguyot/erlang-bblm)
-----------------------------------------------------
+Erlang Language Module for BBEdit v1.3, (2014/10/27)
+========================
 
 The Erlang Language Module introduces syntax colorization, auto-completion,
 function navigation and code folding for the Erlang programming language to
 BBEdit 11 and higher.
-
-Please use Erlang Language Module v1.2 for BBEdit 9 and BBEdit 10.
 
 It recognizes the following Erlang files:
 - erlang source code (.erl)
@@ -14,12 +12,14 @@ It recognizes the following Erlang files:
 - application files (.app)
 - application upgrade files (.appup).
 
+Please use Erlang Language Module v1.2 for BBEdit 9 and BBEdit 10.
+
 Installation
 ------------
 
-To install the plug-in, simply double-click it. This will launch BBEdit (or
-bring it to the front) which will then ask if you want to install the plug-in
-and relaunch BBEdit.
+To install the plug-in, simply double-click it or drop it on BBEdit. This will
+launch BBEdit (or bring it to the front) which will then ask if you want to
+install the plug-in and relaunch BBEdit.
 
 Alternatively, you can put it manually into "~/Library/Application Support/BBEdit/Language Modules/".
 
@@ -27,10 +27,16 @@ Source code and compilation
 ---------------------------
 
 The plug-in can be compiled with XCode and BBEdit SDK.
-It was compiled with the preview version of the SDK. You can obtain it by e-mailing support@barebones.com until it is released.
 
 Source code is available on GitHub:
-http://github.com/pguyot/erlang-bblm/
+http://github.com/pguyot/erlang-bblm
+
+The plug-in was compiled with the preview version of the SDK. You can obtain it
+by e-mailing support@barebones.com until it is released.
+
+[![Build Status](https://travis-ci.org/pguyot/erlang-bblm.png)](https://travis-ci.org/pguyot/erlang-bblm)
+
+(Build fails as the plug-in is incompatible with the current SDK release)
 
 Current limitations
 -------------------
@@ -62,32 +68,34 @@ whole function, not for individual clauses.
 Change history
 --------------
 
-1.0 (2008/08/30).
-        Initial build.
+* 1.0 (2008/08/30)
 
-1.1 (2009/02/15).
-[FEA]   Functions are now predefined words and are therefore colorized.
-[ENH]   @todo in %% comments are reported as ToDo callout items.
-[FEA]   Macro invocations are now colorized (?_something).
-[ENH]   Added all keywords known by erl_parse:reserved_words/1.
-[ENH]   Added functions from the math module.
-[ENH]   Recognize .rel, .app and .appup files.
+    - Initial build.
 
-1.2 (2011/07/16).
-[ENH]   Improved support for .rel, .app and .appup files.
-[ENH]   Added completion for some missing functions and for R13B new functions.
-[ENH]   Added keywords such as opaque and export_type.
-[ENH]   Added built-in type parsing and colorizing.
-[FIX]   Fixed a bug that would yield to a crash when editing an attribute with
-        no parameter.
+* 1.1 (2009/02/15)
 
-1.3 (2014/10/27).
-[ENH]   Upgraded for BBEdit 11.
-[ENH]   Updated completion lists for Erlang 17
-[FEA]   Comments can now be spell-checked (BBEdit 11 addition).
-[FEA]   include and include_lib files can be opened from the popup
-        (BBEdit 11 addition).
-[FIX]   Fixed algorithmic bugs revelead by Clang analyzer.
+    - [FEA]   Functions are now predefined words and are therefore colorized.
+    - [ENH]   @todo in %% comments are reported as ToDo callout items.
+    - [FEA]   Macro invocations are now colorized (?\_something).
+    - [ENH]   Added all keywords known by erl\_parse:reserved_words/1.
+    - [ENH]   Added functions from the math module.
+    - [ENH]   Recognize .rel, .app and .appup files.
+
+* 1.2 (2011/07/16)
+
+    - [ENH]   Improved support for .rel, .app and .appup files.
+    - [ENH]   Added completion for some missing functions and for R13B new functions.
+    - [ENH]   Added keywords such as opaque and export_type.
+    - [ENH]   Added built-in type parsing and colorizing.
+    - [FIX]   Fixed a bug that would yield to a crash when editing an attribute with no parameter.
+
+* 1.3 (2014/10/27)
+
+    - [ENH]   Upgraded for BBEdit 11.
+    - [ENH]   Updated completion lists for Erlang 17
+    - [FEA]   Comments can now be spell-checked (BBEdit 11 addition).
+    - [FEA]   include and include_lib files can be opened from the popup (BBEdit 11 addition).
+    - [FIX]   Fixed algorithmic bugs revelead by Clang analyzer.
 
 License
 -------
