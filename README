@@ -1,4 +1,4 @@
-Erlang Language Module for BBEdit v1.3, (2014/10/27)
+Erlang Language Module for BBEdit v1.3, (2014/10/27) [![Build Status](https://travis-ci.org/pguyot/erlang-bblm.png)](https://travis-ci.org/pguyot/erlang-bblm)
 ----------------------------------------------------
 
 The Erlang Language Module introduces syntax colorization, auto-completion,
