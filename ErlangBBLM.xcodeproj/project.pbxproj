@@ -10,6 +10,7 @@
 		5F35C49E05A096310030C7CA /* BBLMTextIterator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */; };
 		5F35C49F05A096310030C7CA /* BBLMInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */; };
 		5F35C4A305A096310030C7CA /* ErlangBBLM.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2ED4605B05179C27006BE845 /* ErlangBBLM.mm */; };
+		DA052A9F1A001E64009D2AF7 /* DocHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA052A9E1A001E64009D2AF7 /* DocHelper.mm */; };
 		DA063DBE19FBC83D00F5CD84 /* app_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DB719FBC83D00F5CD84 /* app_keywords.txt */; };
 		DA063DBF19FBC83D00F5CD84 /* appup_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DB819FBC83D00F5CD84 /* appup_keywords.txt */; };
 		DA063DC019FBC83D00F5CD84 /* common_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DB919FBC83D00F5CD84 /* common_keywords.txt */; };
@@ -17,9 +18,17 @@
 		DA063DC219FBC83D00F5CD84 /* escript_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBB19FBC83D00F5CD84 /* escript_keywords.txt */; };
 		DA063DC319FBC83D00F5CD84 /* otp_applications.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBC19FBC83D00F5CD84 /* otp_applications.txt */; };
 		DA063DC419FBC83D00F5CD84 /* rel_keywords.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */; };
-		DA063DD019FD53FA00F5CD84 /* ErlangBBLMTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA063DCF19FD53FA00F5CD84 /* ErlangBBLMTests.mm */; };
+		DA063DD019FD53FA00F5CD84 /* ErlangRuntimeTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA063DCF19FD53FA00F5CD84 /* ErlangRuntimeTests.mm */; };
 		DA063DD719FD694E00F5CD84 /* ErlangBBLM.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2ED4605B05179C27006BE845 /* ErlangBBLM.mm */; };
 		DA063DD919FE1D3E00F5CD84 /* Completion.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA063DD819FE1D3E00F5CD84 /* Completion.plist */; };
+		DA32C1931A00E14C009BE958 /* ErlangBBLMDocHelper.app in Resources */ = {isa = PBXBuildFile; fileRef = DA32C1921A00E0E1009BE958 /* ErlangBBLMDocHelper.app */; };
+		DA32C1961A00E1D3009BE958 /* ErlangRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = DA32C1941A00E1D3009BE958 /* ErlangRuntime.h */; };
+		DA32C1971A00E1D3009BE958 /* ErlangRuntime.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32C1951A00E1D3009BE958 /* ErlangRuntime.mm */; };
+		DA32C1981A00E1D3009BE958 /* ErlangRuntime.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32C1951A00E1D3009BE958 /* ErlangRuntime.mm */; };
+		DA32C1991A00E1D3009BE958 /* ErlangRuntime.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32C1951A00E1D3009BE958 /* ErlangRuntime.mm */; };
+		DAA53A321A01345700DEABF8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAA53A311A01345700DEABF8 /* Cocoa.framework */; };
+		DAA53A341A0136AA00DEABF8 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAA53A331A0136AA00DEABF8 /* CoreServices.framework */; };
+		DAA53A371A0137E500DEABF8 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAA53A331A0136AA00DEABF8 /* CoreServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -33,12 +42,24 @@
 		};
 /* End PBXBuildRule section */
 
+/* Begin PBXContainerItemProxy section */
+		DAA53A351A01379600DEABF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA052A961A001E64009D2AF7;
+			remoteInfo = ErlangBBLMDocHelper;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMTextIterator.h; path = "BBEdit SDK/Interfaces/Language Modules/BBLMTextIterator.h"; sourceTree = "<group>"; };
 		2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMInterface.h; path = "BBEdit SDK/Interfaces/Language Modules/BBLMInterface.h"; sourceTree = "<group>"; };
 		2ED4605B05179C27006BE845 /* ErlangBBLM.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = ErlangBBLM.mm; sourceTree = "<group>"; };
 		5F35C4A805A096310030C7CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F35C4A905A096310030C7CA /* Erlang.bblm */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Erlang.bblm; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA052A9A1A001E64009D2AF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA052A9E1A001E64009D2AF7 /* DocHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = DocHelper.mm; path = DocHelper/DocHelper.mm; sourceTree = "<group>"; };
 		DA063DB719FBC83D00F5CD84 /* app_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = app_keywords.txt; sourceTree = "<group>"; };
 		DA063DB819FBC83D00F5CD84 /* appup_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = appup_keywords.txt; sourceTree = "<group>"; };
 		DA063DB919FBC83D00F5CD84 /* common_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = common_keywords.txt; sourceTree = "<group>"; };
@@ -48,9 +69,14 @@
 		DA063DBD19FBC83D00F5CD84 /* rel_keywords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rel_keywords.txt; sourceTree = "<group>"; };
 		DA063DCB19FD53FA00F5CD84 /* ErlangBBLMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ErlangBBLMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA063DCE19FD53FA00F5CD84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DA063DCF19FD53FA00F5CD84 /* ErlangBBLMTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ErlangBBLMTests.mm; sourceTree = "<group>"; };
+		DA063DCF19FD53FA00F5CD84 /* ErlangRuntimeTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ErlangRuntimeTests.mm; sourceTree = "<group>"; };
 		DA063DD519FD669C00F5CD84 /* ErlangBBLM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ErlangBBLM.h; sourceTree = "<group>"; };
 		DA063DD819FE1D3E00F5CD84 /* Completion.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Completion.plist; sourceTree = "<group>"; };
+		DA32C1921A00E0E1009BE958 /* ErlangBBLMDocHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ErlangBBLMDocHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA32C1941A00E1D3009BE958 /* ErlangRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErlangRuntime.h; sourceTree = "<group>"; };
+		DA32C1951A00E1D3009BE958 /* ErlangRuntime.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ErlangRuntime.mm; sourceTree = "<group>"; };
+		DAA53A311A01345700DEABF8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		DAA53A331A0136AA00DEABF8 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +84,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAA53A341A0136AA00DEABF8 /* CoreServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA052A941A001E64009D2AF7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAA53A321A01345700DEABF8 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAA53A371A0137E500DEABF8 /* CoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +110,8 @@
 		089C166AFE841209C02AAC07 /* Hello World */ = {
 			isa = PBXGroup;
 			children = (
+				DAA53A331A0136AA00DEABF8 /* CoreServices.framework */,
+				DAA53A311A01345700DEABF8 /* Cocoa.framework */,
 				DA063DB619FBC83D00F5CD84 /* keywords */,
 				08FB77ADFE841716C02AAC07 /* Source */,
 				2EADE40E056EA22B004A4EFC /* SDK Headers */,
@@ -82,6 +120,8 @@
 				5F35C4A905A096310030C7CA /* Erlang.bblm */,
 				DA063DCB19FD53FA00F5CD84 /* ErlangBBLMTests.xctest */,
 				DA063DCC19FD53FA00F5CD84 /* Tests */,
+				DA052A981A001E64009D2AF7 /* DocHelper */,
+				DA32C1921A00E0E1009BE958 /* ErlangBBLMDocHelper.app */,
 			);
 			name = "Hello World";
 			sourceTree = "<group>";
@@ -89,8 +129,11 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				2ED4605B05179C27006BE845 /* ErlangBBLM.mm */,
 				DA063DD519FD669C00F5CD84 /* ErlangBBLM.h */,
+				2ED4605B05179C27006BE845 /* ErlangBBLM.mm */,
+				DA32C1941A00E1D3009BE958 /* ErlangRuntime.h */,
+				DA32C1951A00E1D3009BE958 /* ErlangRuntime.mm */,
+				DA052A9E1A001E64009D2AF7 /* DocHelper.mm */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -102,6 +145,14 @@
 				2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */,
 			);
 			name = "SDK Headers";
+			sourceTree = "<group>";
+		};
+		DA052A981A001E64009D2AF7 /* DocHelper */ = {
+			isa = PBXGroup;
+			children = (
+				DA052A9A1A001E64009D2AF7 /* Info.plist */,
+			);
+			path = DocHelper;
 			sourceTree = "<group>";
 		};
 		DA063DB619FBC83D00F5CD84 /* keywords */ = {
@@ -121,7 +172,7 @@
 		DA063DCC19FD53FA00F5CD84 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				DA063DCF19FD53FA00F5CD84 /* ErlangBBLMTests.mm */,
+				DA063DCF19FD53FA00F5CD84 /* ErlangRuntimeTests.mm */,
 				DA063DCD19FD53FA00F5CD84 /* Supporting Files */,
 			);
 			path = Tests;
@@ -142,6 +193,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA32C1961A00E1D3009BE958 /* ErlangRuntime.h in Headers */,
 				5F35C49E05A096310030C7CA /* BBLMTextIterator.h in Headers */,
 				5F35C49F05A096310030C7CA /* BBLMInterface.h in Headers */,
 			);
@@ -164,12 +216,30 @@
 				2E8C2DA207778A51009F40D0 /* PBXBuildRule */,
 			);
 			dependencies = (
+				DAA53A361A01379600DEABF8 /* PBXTargetDependency */,
 			);
 			name = Erlang;
 			productInstallPath = "$(HOME)/Library/Bundles";
 			productName = "Hello World";
 			productReference = 5F35C4A905A096310030C7CA /* Erlang.bblm */;
 			productType = "com.apple.product-type.bundle";
+		};
+		DA052A961A001E64009D2AF7 /* ErlangBBLMDocHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA052AB71A001E64009D2AF7 /* Build configuration list for PBXNativeTarget "ErlangBBLMDocHelper" */;
+			buildPhases = (
+				DA052A931A001E64009D2AF7 /* Sources */,
+				DA052A941A001E64009D2AF7 /* Frameworks */,
+				DA052A951A001E64009D2AF7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ErlangBBLMDocHelper;
+			productName = DocHelper;
+			productReference = DA32C1921A00E0E1009BE958 /* ErlangBBLMDocHelper.app */;
+			productType = "com.apple.product-type.application";
 		};
 		DA063DCA19FD53FA00F5CD84 /* ErlangBBLMTests */ = {
 			isa = PBXNativeTarget;
@@ -196,6 +266,9 @@
 			attributes = {
 				LastUpgradeCheck = 0610;
 				TargetAttributes = {
+					DA052A961A001E64009D2AF7 = {
+						CreatedOnToolsVersion = 6.1;
+					};
 					DA063DCA19FD53FA00F5CD84 = {
 						CreatedOnToolsVersion = 6.1;
 					};
@@ -207,6 +280,7 @@
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 089C166AFE841209C02AAC07 /* Hello World */;
 			productRefGroup = 089C166AFE841209C02AAC07 /* Hello World */;
@@ -215,6 +289,7 @@
 			targets = (
 				5F35C49C05A096310030C7CA /* Erlang */,
 				DA063DCA19FD53FA00F5CD84 /* ErlangBBLMTests */,
+				DA052A961A001E64009D2AF7 /* ErlangBBLMDocHelper */,
 			);
 		};
 /* End PBXProject section */
@@ -229,9 +304,17 @@
 				DA063DC119FBC83D00F5CD84 /* erl_keywords.txt in Resources */,
 				DA063DBE19FBC83D00F5CD84 /* app_keywords.txt in Resources */,
 				DA063DD919FE1D3E00F5CD84 /* Completion.plist in Resources */,
+				DA32C1931A00E14C009BE958 /* ErlangBBLMDocHelper.app in Resources */,
 				DA063DC319FBC83D00F5CD84 /* otp_applications.txt in Resources */,
 				DA063DC019FBC83D00F5CD84 /* common_keywords.txt in Resources */,
 				DA063DBF19FBC83D00F5CD84 /* appup_keywords.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA052A951A001E64009D2AF7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +343,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F35C4A305A096310030C7CA /* ErlangBBLM.mm in Sources */,
+				DA32C1971A00E1D3009BE958 /* ErlangRuntime.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA052A931A001E64009D2AF7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA052A9F1A001E64009D2AF7 /* DocHelper.mm in Sources */,
+				DA32C1991A00E1D3009BE958 /* ErlangRuntime.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,12 +360,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA063DD019FD53FA00F5CD84 /* ErlangBBLMTests.mm in Sources */,
+				DA32C1981A00E1D3009BE958 /* ErlangRuntime.mm in Sources */,
+				DA063DD019FD53FA00F5CD84 /* ErlangRuntimeTests.mm in Sources */,
 				DA063DD719FD694E00F5CD84 /* ErlangBBLM.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DAA53A361A01379600DEABF8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA052A961A001E64009D2AF7 /* ErlangBBLMDocHelper */;
+			targetProxy = DAA53A351A01379600DEABF8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2E4F91BF08631638009D6578 /* Development */ = {
@@ -309,7 +411,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -337,6 +439,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -361,7 +464,7 @@
 		2E4F91C308631638009D6578 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Development;
@@ -369,7 +472,7 @@
 		2E4F91C408631638009D6578 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 			};
 			name = Deployment;
@@ -377,8 +480,127 @@
 		2E4F91C508631638009D6578 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+			};
+			name = Default;
+		};
+		DA052AB11A001E64009D2AF7 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = DocHelper/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Development;
+		};
+		DA052AB21A001E64009D2AF7 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = DocHelper/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Deployment;
+		};
+		DA052AB31A001E64009D2AF7 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = DocHelper/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Default;
 		};
@@ -399,7 +621,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -446,7 +667,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -487,7 +707,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -530,6 +749,16 @@
 				2E4F91C308631638009D6578 /* Development */,
 				2E4F91C408631638009D6578 /* Deployment */,
 				2E4F91C508631638009D6578 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		DA052AB71A001E64009D2AF7 /* Build configuration list for PBXNativeTarget "ErlangBBLMDocHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA052AB11A001E64009D2AF7 /* Development */,
+				DA052AB21A001E64009D2AF7 /* Deployment */,
+				DA052AB31A001E64009D2AF7 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;

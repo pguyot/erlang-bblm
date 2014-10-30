@@ -34,6 +34,20 @@
                ReferencedContainer = "container:ErlangBBLM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DA052A961A001E64009D2AF7"
+               BuildableName = "ErlangBBLMDocHelper.app"
+               BlueprintName = "ErlangBBLMDocHelper"
+               ReferencedContainer = "container:ErlangBBLM.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

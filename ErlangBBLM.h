@@ -21,10 +21,4 @@
 #define kErlangReleaseResourceFileLangType 'ErlR'
 #define kErlangScriptFileLangType 'ErlS'
 
-// Prototypes of tested methods.
-namespace com_semiocast_bblm_erlang {
-    NSString* ParseErlangString(NSString* expression);
-    NSString* EvalErlang(NSString* expression);
-}
-
 #endif

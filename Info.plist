@@ -25,6 +25,8 @@
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
@@ -108,12 +110,14 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
-			<key>kBBLMRunKindForWordMessage</key>
-			<true/>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
@@ -172,10 +176,14 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
@@ -234,10 +242,14 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
@@ -296,10 +308,14 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
@@ -364,8 +380,8 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
-			<key>kBBLMRunKindForWordMessage</key>
-			<true/>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 	</array>
 </dict>
