@@ -7,17 +7,17 @@
 	<key>CFBundleExecutable</key>
 	<string>Erlang</string>
 	<key>CFBundleGetInfoString</key>
-	<string>1.3, copyright © 2008-2014 by Paul Guyot, Semiocast.</string>
+	<string>1.4, copyright © 2008-2018 by Paul Guyot, Semiocast.</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.semiocast.bblm.erlang</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
-	<key>CFBundleVersion</key>
-	<string>1.3</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.3</string>
+	<string>1.4</string>
+	<key>CFBundleVersion</key>
+	<string>1.4</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>com.barebones.bblminfo</key>
@@ -25,14 +25,16 @@
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
-			<key>BBLMCommentLineDefault</key>
-			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
 			<false/>
+			<key>BBLMCanResolveIncludeFiles</key>
+			<true/>
 			<key>BBLMColorsSyntax</key>
 			<true/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMDroppedFilePathStyle</key>
 			<string>POSIX</string>
 			<key>BBLMEntryPointName</key>
@@ -42,8 +44,6 @@
 			<key>BBLMFunctionScannerDoesFoldsToo</key>
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
-			<true/>
-			<key>BBLMCanResolveIncludeFiles</key>
 			<true/>
 			<key>BBLMKeywords</key>
 			<array>
@@ -72,6 +72,8 @@
 			<array>
 				<string>com.barebones.bblm.code</string>
 			</array>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 			<key>BBLMRunColors</key>
 			<dict>
 				<key>com.semiocast.bblm.erlang.builtInType</key>
@@ -110,20 +112,20 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
-			<key>BBLMReferenceSearchURLTemplate</key>
-			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
-			<key>BBLMCommentLineDefault</key>
-			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
 			<false/>
+			<key>BBLMCanResolveIncludeFiles</key>
+			<true/>
 			<key>BBLMColorsSyntax</key>
 			<true/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMDroppedFilePathStyle</key>
 			<string>POSIX</string>
 			<key>BBLMEntryPointName</key>
@@ -133,8 +135,6 @@
 			<key>BBLMFunctionScannerDoesFoldsToo</key>
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
-			<true/>
-			<key>BBLMCanResolveIncludeFiles</key>
 			<true/>
 			<key>BBLMKeywords</key>
 			<array>
@@ -157,6 +157,8 @@
 			<array>
 				<string>com.barebones.bblm.code</string>
 			</array>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 			<key>BBLMScansFunctions</key>
 			<false/>
 			<key>BBLMSpellableRunKinds</key>
@@ -176,20 +178,20 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
-			<key>BBLMReferenceSearchURLTemplate</key>
-			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
-			<key>BBLMCommentLineDefault</key>
-			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
 			<false/>
+			<key>BBLMCanResolveIncludeFiles</key>
+			<true/>
 			<key>BBLMColorsSyntax</key>
 			<true/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMDroppedFilePathStyle</key>
 			<string>POSIX</string>
 			<key>BBLMEntryPointName</key>
@@ -199,8 +201,6 @@
 			<key>BBLMFunctionScannerDoesFoldsToo</key>
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
-			<true/>
-			<key>BBLMCanResolveIncludeFiles</key>
 			<true/>
 			<key>BBLMKeywords</key>
 			<array>
@@ -223,6 +223,8 @@
 			<array>
 				<string>com.barebones.bblm.code</string>
 			</array>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 			<key>BBLMScansFunctions</key>
 			<false/>
 			<key>BBLMSpellableRunKinds</key>
@@ -242,20 +244,20 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
-			<key>BBLMReferenceSearchURLTemplate</key>
-			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
-			<key>BBLMCommentLineDefault</key>
-			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
 			<false/>
+			<key>BBLMCanResolveIncludeFiles</key>
+			<true/>
 			<key>BBLMColorsSyntax</key>
 			<true/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMDroppedFilePathStyle</key>
 			<string>POSIX</string>
 			<key>BBLMEntryPointName</key>
@@ -265,8 +267,6 @@
 			<key>BBLMFunctionScannerDoesFoldsToo</key>
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
-			<true/>
-			<key>BBLMCanResolveIncludeFiles</key>
 			<true/>
 			<key>BBLMKeywords</key>
 			<array>
@@ -289,6 +289,8 @@
 			<array>
 				<string>com.barebones.bblm.code</string>
 			</array>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 			<key>BBLMScansFunctions</key>
 			<false/>
 			<key>BBLMSpellableRunKinds</key>
@@ -308,20 +310,20 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
-			<key>BBLMReferenceSearchURLTemplate</key>
-			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 		<dict>
 			<key>BBLMAlwaysGuessLanguage</key>
 			<false/>
-			<key>BBLMCommentLineDefault</key>
-			<string>% </string>
 			<key>BBLMCanGenerateHTMLForPreview</key>
 			<false/>
 			<key>BBLMCanGuessLanguage</key>
 			<false/>
+			<key>BBLMCanResolveIncludeFiles</key>
+			<true/>
 			<key>BBLMColorsSyntax</key>
 			<true/>
+			<key>BBLMCommentLineDefault</key>
+			<string>% </string>
 			<key>BBLMDroppedFilePathStyle</key>
 			<string>POSIX</string>
 			<key>BBLMEntryPointName</key>
@@ -331,8 +333,6 @@
 			<key>BBLMFunctionScannerDoesFoldsToo</key>
 			<true/>
 			<key>BBLMIsCaseSensitive</key>
-			<true/>
-			<key>BBLMCanResolveIncludeFiles</key>
 			<true/>
 			<key>BBLMKeywords</key>
 			<array>
@@ -361,6 +361,8 @@
 			<array>
 				<string>com.barebones.bblm.code</string>
 			</array>
+			<key>BBLMReferenceSearchURLTemplate</key>
+			<string>x-erlman:__SYMBOLNAME__</string>
 			<key>BBLMScansFunctions</key>
 			<true/>
 			<key>BBLMSpellableRunKinds</key>
@@ -380,8 +382,6 @@
 			<true/>
 			<key>BBLMUseHTMLFileSearchRules</key>
 			<false/>
-			<key>BBLMReferenceSearchURLTemplate</key>
-			<string>x-erlman:__SYMBOLNAME__</string>
 		</dict>
 	</array>
 </dict>

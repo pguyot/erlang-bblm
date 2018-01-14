@@ -6,7 +6,7 @@
 //
 // Licensed under the MIT License.
 //
-// Copyright (c) 2008-2014 by Paul Guyot, Semiocast.
+// Copyright (c) 2008-2018 by Paul Guyot, Semiocast.
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
