@@ -9,7 +9,7 @@
 #import "ErlangRuntime.h"
 
 namespace com_semiocast_bblm_erlang {
-    
+
     // http://erlang.org/doc/reference_manual/data_types.html#id76876
     static unichar EscapeChar(unichar c) {
         unichar r;
@@ -57,7 +57,7 @@ namespace com_semiocast_bblm_erlang {
         }
         return r;
     }
-    
+
     NSString* ParseErlangString(NSString* expression) {
         NSString* result = nil;
         NSUInteger exprLen = [expression length];
@@ -103,12 +103,12 @@ namespace com_semiocast_bblm_erlang {
                     len++;
                     [scanner scanString: @"," intoString: nil];
                 }
-                
+
             }
         }
         return result;
     }
-    
+
     ///
     /// Convert a symbol to a man page.
     /// Actually sanitize the string by only keeping [_a-zA-Z0-9-]
@@ -143,15 +143,15 @@ namespace com_semiocast_bblm_erlang {
     NSString* ErlangManPage(NSString* page) {
         NSPipe* stdoutPipe = [NSPipe pipe];
         NSFileHandle* stdoutFile = stdoutPipe.fileHandleForReading;
-        
+
         NSString* erlManCommand = [NSString stringWithFormat:@"erl -man %@ | col -bx", page];
-        
+
         NSTask *task = [NSTask new];
         NSDictionary *environmentDict = [[NSProcessInfo processInfo] environment];
         NSString *shellString = [environmentDict objectForKey:@"SHELL"];
         task.launchPath = shellString;
         task.arguments = @[@"-c", erlManCommand];
-        
+
         task.standardOutput = stdoutPipe;
         [task launch];
         NSData *data = [stdoutFile readDataToEndOfFile];
@@ -173,19 +173,19 @@ namespace com_semiocast_bblm_erlang {
     /// This avoids parametrized text passed to /bin/sh
     ///
 #define ERL_EVAL_COMMAND_LINE @"erl -eval 'error_logger:tty(false), {ok, Expr, _} = io:parse_erl_exprs([]), Result = (catch begin {value, R, _} = erl_eval:exprs(Expr, []), R end), io:format(\"~p\", [Result]), init:stop().' -noshell"
-    
+
     NSString* EvalErlang(NSString* expression) {
         NSPipe* stdoutPipe = [NSPipe pipe];
         NSFileHandle* stdoutFile = stdoutPipe.fileHandleForReading;
         NSPipe* stdinPipe = [NSPipe pipe];
         NSFileHandle* stdinFile = stdinPipe.fileHandleForWriting;
-        
+
         NSTask *task = [NSTask new];
         NSDictionary *environmentDict = [[NSProcessInfo processInfo] environment];
         NSString *shellString = [environmentDict objectForKey:@"SHELL"];
         task.launchPath = shellString;
         task.arguments = @[@"-c", ERL_EVAL_COMMAND_LINE];
-        
+
         task.standardOutput = stdoutPipe;
         task.standardInput = stdinPipe;
         [task launch];
