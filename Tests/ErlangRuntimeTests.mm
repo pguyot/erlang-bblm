@@ -52,6 +52,7 @@ using namespace com_semiocast_bblm_erlang;
     XCTAssertNil(ErlangManPage(@"foobar"));
     XCTAssertNotNil(ErlangManPage(@"mnesia"));
     XCTAssert([ErlangManPage(@"mnesia") hasPrefix: @"mnesia(3)"]);
+    XCTAssert([ErlangManPage(@"mnesia") hasSuffix: @"mnesia(3)\n"]);
 }
 
 @end
