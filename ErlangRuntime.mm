@@ -10,7 +10,7 @@
 
 namespace com_semiocast_bblm_erlang {
     
-    // http://erlang.org/doc/reference_manual/data_types.html#id69286
+    // http://erlang.org/doc/reference_manual/data_types.html#id76876
     static unichar EscapeChar(unichar c) {
         unichar r;
         switch (c) {
@@ -155,6 +155,7 @@ namespace com_semiocast_bblm_erlang {
         task.standardOutput = stdoutPipe;
         [task launch];
         NSData *data = [stdoutFile readDataToEndOfFile];
+        [task waitUntilExit];
         [stdoutFile closeFile];
         NSString* output = nil;
         if ([task terminationStatus] == 0) {
