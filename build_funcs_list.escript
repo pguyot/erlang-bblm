@@ -73,7 +73,7 @@ process_xml_src_file(XMLFile) ->
                         end
                     end, [], Funcs);
                 _ ->
-                    io:format("no function found in ~s\n", [XMLFile]),
+                    io:format(standard_error, "no function found in ~s\n", [XMLFile]),
                     [] % no function was found (e.g. erlang_stub.xml)
             end,
             [{string:to_lower(ModuleName), ModuleName, lists:reverse(FormattedFunctionsR)}];
