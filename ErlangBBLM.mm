@@ -1333,7 +1333,7 @@ NSString* FindApplication(NSString* documentDir, NSString* applicationName) {
 }
 
 static
-void CreateResolveIncludeFile(bblmResolveIncludeParams& ioParams) {
+void CreateURLByResolvingIncludeFileMessage(bblmResolveIncludeParams& ioParams) {
     NSString* documentDir = [[(NSURL*)ioParams.fInDocumentURL path] stringByDeletingLastPathComponent];
     NSString* candidate = [documentDir stringByAppendingPathComponent:(NSString*)ioParams.fInIncludeFileString];
     NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -1399,13 +1399,13 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 			result = noErr;
 			break;
 		
-		case kBBLMCalculateRunsMessage:
-			CalculateRuns(params, bblm_callbacks);
+		case kBBLMScanForFunctionsMessage:
+			ScanForFunctions(params, bblm_callbacks);
 			result = noErr;
 			break;
 
-		case kBBLMScanForFunctionsMessage:
-			ScanForFunctions(params, bblm_callbacks);
+		case kBBLMCalculateRunsMessage:
+			CalculateRuns(params, bblm_callbacks);
 			result = noErr;
 			break;
 
@@ -1415,66 +1415,52 @@ OSErr ErlangMachO(BBLMParamBlock &params,
 			break;
 
 		case kBBLMEscapeStringMessage:
-		{
 			result = userCanceledErr;
 			break;
-		}
+
 		case kBBLMAdjustEndMessage:
-		{
 			result = noErr;
 			break;
-		}
+
 		case kBBLMGuessLanguageMessage:
-		{
 			result = userCanceledErr;
 			break;
-		}
 
 		case kBBLMSetCategoriesMessage:
-		{
 		    SetCategories(params.fCategoryParams.fCategoryTable);
 		    result = noErr;
 		    break;
-		}
 
         case kBBLMAdjustRangeForTextCompletion:
-		{
 			AdjustRangeForTextCompletion(params, params.fAdjustCompletionRangeParams);
             result = noErr;
             break;
-        }
+
 		case kBBLMSetCategoriesForTextCompletionMessage:
-		{
 		    SetCategoryTableForTextCompletion(params.fCategoryParams.fCategoryTable);
 		    result = noErr;
 		    break;
-		}
+
 		case kBBLMCreateTextCompletionArray:
-		{
-			CreateTextCompletionArray(params.fCreateCompletionArrayParams, params.fLanguage);
-			result = noErr;
-			break;
-		}
-		case kBBLMRunKindForWordMessage:
-		{
-		    RunKindForWordMessage(params.fWordLookupParams, params.fLanguage);
-			result = noErr;
-			break;
-		}
-		case kBBLMResolveIncludeFileMessage:
-		{
-            CreateResolveIncludeFile(params.fResolveIncludeParams);
-			result = noErr;
-			break;
-		}
-		
-		default:
-		{
-			result = paramErr;
-			break;
-		}
-	}
-	return result;	
+		    CreateTextCompletionArray(params.fCreateCompletionArrayParams, params.fLanguage);
+            result = noErr;
+            break;
+
+        case kBBLMRunKindForWordMessage:
+            RunKindForWordMessage(params.fWordLookupParams, params.fLanguage);
+            result = noErr;
+            break;
+
+        case kBBLMCreateURLByResolvingIncludeFileMessage:
+            CreateURLByResolvingIncludeFileMessage(params.fResolveIncludeParams);
+            result = noErr;
+            break;
+
+        default:
+            result = paramErr;
+            break;
+    }
+    return result;
 }
 
 }
