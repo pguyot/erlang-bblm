@@ -3,11 +3,11 @@
 // Project:			ErlangBBLM
 // Written by:		Paul Guyot (paulguyot@ieee.org) with the help of
 //                  Jim Correia and the BBEdit SDK.
-// 
+//
 // Licensed under the MIT License.
-// 
+//
 // Copyright (c) 2008-2014 by Paul Guyot, Semiocast.
-// 
+//
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
 // files (the "Software"), to deal in the Software without
@@ -16,10 +16,10 @@
 // copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following
 // conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 // OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -61,21 +61,21 @@ NSSet* gPredefinedNames = NULL;
 
 static
 OSErr Init() {
-	OSErr result = noErr;
+    OSErr result = noErr;
     NSBundle* myBundle = [NSBundle bundleWithIdentifier:BUNDLE_IDENTIFIER];
-	if (myBundle != nil) {
+    if (myBundle != nil) {
         NSString* docHelperPath = [myBundle pathForResource:@"ErlangBBLMDocHelper" ofType:@"app"];
         LSRegisterURL((CFURLRef) [NSURL fileURLWithPath:docHelperPath], true);
-        
+
         NSString* completionPath = [myBundle pathForResource:@"Completion" ofType:@"plist"];
         NSDictionary* completion = [NSDictionary dictionaryWithContentsOfFile:completionPath];
-		gAttributesDict = [[completion objectForKey: ATTRIBUTES_FOR_COMPLETION] retain];
+        gAttributesDict = [[completion objectForKey: ATTRIBUTES_FOR_COMPLETION] retain];
         gDocTagsDict = [[completion objectForKey: DOCTAGS_FOR_COMPLETION] retain];
-		gFunctionsDict = [[completion objectForKey: FUNCTIONS_FOR_COMPLETION] retain];
+        gFunctionsDict = [[completion objectForKey: FUNCTIONS_FOR_COMPLETION] retain];
         gTypesDict = [[completion objectForKey: TYPES_FOR_COMPLETION] retain];
 
-		if (gFunctionsDict != NULL)
-		{
+        if (gFunctionsDict != NULL)
+        {
             // Create the set of predefined names.
             CFIndex nbValues = [gFunctionsDict count];
             NSMutableSet* theSet = [[NSMutableSet alloc] initWithCapacity: nbValues / 3];
@@ -85,9 +85,9 @@ OSErr Init() {
                 [theSet addObject: [gFunctionsDict objectAtIndex: indexValue]];
             }
             gPredefinedNames = theSet;
-		}
-		if (gTypesDict != NULL)
-		{
+        }
+        if (gTypesDict != NULL)
+        {
             // Create the set of parametrized and non-parametrized built-in types.
             CFIndex nbValues = [gTypesDict count];
             NSMutableSet* theParametrizedSet = [[NSMutableSet alloc] initWithCapacity: nbValues / 3];
@@ -104,12 +104,12 @@ OSErr Init() {
             }
             gNonParametrizedTypesSet = theNonParametrizedSet;
             gParametrizedTypesSet = theParametrizedSet;
-		}
-	} else {
-		result = fnfErr;
-	}
-	
-	return result;
+        }
+    } else {
+        result = fnfErr;
+    }
+
+    return result;
 }
 
 static void Dispose()
@@ -135,163 +135,161 @@ static void Dispose()
 // My own function kinds.
 enum
 {
-	kErlSpecAttr = kBBLMFirstUserFunctionKind   // used for both -spec and -callback
+    kErlSpecAttr = kBBLMFirstUserFunctionKind   // used for both -spec and -callback
 };
 
 #define iswordchar(x) (isalnum(x)||x=='_')
 
 struct runloc
 {
-	UInt32 	pos;
-	UInt32	last_start;
+    UInt32  pos;
+    UInt32  last_start;
 };
 
 enum
 {
-	kBufsize = 3
+    kBufsize = 3
 };
 
-typedef UniChar charbuf[kBufsize]; 
+typedef UniChar charbuf[kBufsize];
 
 static UniChar start(struct runloc& r, BBLMTextIterator &p, BBLMParamBlock &pb, charbuf chars)
 {
-	r.last_start = pb.fCalcRunParams.fStartOffset;
-	r.pos = pb.fCalcRunParams.fStartOffset;
-	p += r.pos;
-	
-	if (chars)
-	{
-		for (int i=1; i <kBufsize; i++)
-			chars[i] = 0;
-			
-		chars[0] = *p;
-	}
-	
-	return *p;
+    r.last_start = pb.fCalcRunParams.fStartOffset;
+    r.pos = pb.fCalcRunParams.fStartOffset;
+    p += r.pos;
+
+    if (chars)
+    {
+        for (int i=1; i <kBufsize; i++)
+            chars[i] = 0;
+
+        chars[0] = *p;
+    }
+
+    return *p;
 }
 
 static UniChar nextchar(struct runloc& r, BBLMTextIterator &p, BBLMParamBlock &pb)
 {
-	if (r.pos < pb.fTextLength)
-	{
-		r.pos++;
-		p++;
+    if (r.pos < pb.fTextLength)
+    {
+        r.pos++;
+        p++;
 
-		return *p;
-	}
-		
-	return 0;
+        return *p;
+    }
+
+    return 0;
 }
 
 static bool addRun(NSString* kind, int start, int len, const BBLMCallbackBlock& bblm_callbacks, UInt32 inLanguage, bool dontMerge=false)
 {
-	if (len > 0) { // Tie off the code run we were in, unless the length is zero.
-		return bblmAddRun(	&bblm_callbacks, inLanguage,
-							kind, start, len, dontMerge);
-							
-	}
-	else{
-		return true;
-	}
-}					
+    if (len > 0) { // Tie off the code run we were in, unless the length is zero.
+        return bblmAddRun(  &bblm_callbacks, inLanguage,
+                            kind, start, len, dontMerge);
+    } else {
+        return true;
+    }
+}
 
 static bool addRunAt(NSString* kind, struct runloc& r, const BBLMCallbackBlock& bblm_callbacks, UInt32 inLanguage, int off=0, bool dontMerge=false)
 {
-	bool more_runs = addRun(kind, r.last_start, r.pos - r.last_start+1+off, bblm_callbacks, inLanguage, dontMerge);
-	r.last_start =  r.pos+1+off;
-	return more_runs;
+    bool more_runs = addRun(kind, r.last_start, r.pos - r.last_start+1+off, bblm_callbacks, inLanguage, dontMerge);
+    r.last_start =  r.pos+1+off;
+    return more_runs;
 }
 
 // Determine if a given string is a macro.
 // The iterator is set on the first character of the macro.
 static bool isMacro(BBLMTextIterator& p, int inNameLen, const BBLMCallbackBlock& bblm_callbacks)
 {
-	// TODO.
-	return true;
+    // TODO.
+    return true;
 }
 
 // Color a macro, i.e. anything until a word break (any non-valid macro character will do).
 static bool colormacro(
-				BBLMParamBlock &pb,
-				struct runloc &r,
-				BBLMTextIterator &p,
-				const BBLMCallbackBlock &bblm_callbacks)
+                BBLMParamBlock &pb,
+                struct runloc &r,
+                BBLMTextIterator &p,
+                const BBLMCallbackBlock &bblm_callbacks)
 {
-	bool more_runs = true;
-	UniChar c;
-	
-	UInt32 startChar = r.pos;
-	BBLMTextIterator nameIter(p);
-	nameIter++;
-	
-	while ((c = nextchar(r, p, pb))) {
-		if (!iswordchar(c)) {
-			UInt32 nameLen = r.pos - startChar - 1;
-			// Is it a macro?
-			if (isMacro(nameIter, nameLen, bblm_callbacks)) {
-				more_runs = addRunAt(kErlRunIsMacroName, r, bblm_callbacks, pb.fLanguage, -1);
-			}
-			break;
-		}
-	}
-	return more_runs;
+    bool more_runs = true;
+    UniChar c;
+
+    UInt32 startChar = r.pos;
+    BBLMTextIterator nameIter(p);
+    nameIter++;
+
+    while ((c = nextchar(r, p, pb))) {
+        if (!iswordchar(c)) {
+            UInt32 nameLen = r.pos - startChar - 1;
+            // Is it a macro?
+            if (isMacro(nameIter, nameLen, bblm_callbacks)) {
+                more_runs = addRunAt(kErlRunIsMacroName, r, bblm_callbacks, pb.fLanguage, -1);
+            }
+            break;
+        }
+    }
+    return more_runs;
 }
 
 // Color a string, i.e. define a run until the next " character.
 // If a backslash is encountered, skip the next character.
 static bool colorstr(
-				BBLMParamBlock &pb,
-				struct runloc &r,
-				BBLMTextIterator &p,
-				const BBLMCallbackBlock &bblm_callbacks)
+	            BBLMParamBlock &pb,
+                struct runloc &r,
+                BBLMTextIterator &p,
+                const BBLMCallbackBlock &bblm_callbacks)
 {
-	bool more_runs = true;
-	UniChar c;
-	
-	while ((c = nextchar(r, p, pb))) {
-		if (c == '"') {
-			more_runs = addRunAt(kBBLMStringRunKind, r, bblm_callbacks, pb.fLanguage);
-			break;
-		}
+    bool more_runs = true;
+    UniChar c;
+
+    while ((c = nextchar(r, p, pb))) {
+        if (c == '"') {
+            more_runs = addRunAt(kBBLMStringRunKind, r, bblm_callbacks, pb.fLanguage);
+            break;
+        }
         if (c=='\r'|| c=='\n'){
             break;
         }
-		if (c == '\\'){
-			nextchar(r, p, pb);
-		}
-	}
-	return more_runs;
+        if (c == '\\'){
+            nextchar(r, p, pb);
+        }
+    }
+    return more_runs;
 }
 
 // Color a comment, i.e. define a run until the next endline.
 // We also color edoc tags (actually, anything starting with @ in a double % comment).
 static bool colorcomment(BBLMParamBlock &pb,
-				struct runloc &r,
-				BBLMTextIterator &p,
-				const BBLMCallbackBlock &bblm_callbacks)
+                struct runloc &r,
+                BBLMTextIterator &p,
+                const BBLMCallbackBlock &bblm_callbacks)
 {
-	bool more_runs = true;
-	UniChar c;
-	c = nextchar(r, p, pb);
-	
-	if (c == '%')
-	{
-		// Double %, scan for edoc tags.
-		while ((c = nextchar(r, p, pb)))
-		{
-			if (c=='@') {
-				more_runs = addRunAt(kBBLMCommentRunKind, r, bblm_callbacks, pb.fLanguage, -1);
-				if (!more_runs) {
-					break;
-				}
+    bool more_runs = true;
+    UniChar c;
+    c = nextchar(r, p, pb);
 
-				while ((c = nextchar(r, p, pb))) {
-					if (c==' ' || c=='\r' || c=='\n') {
-						break;
-					}
-				}
-				more_runs = addRunAt(kErlCommentTagRunKind, r, bblm_callbacks, pb.fLanguage, -1);
-				if (!more_runs) {
+    if (c == '%')
+    {
+        // Double %, scan for edoc tags.
+        while ((c = nextchar(r, p, pb)))
+        {
+            if (c=='@') {
+                more_runs = addRunAt(kBBLMCommentRunKind, r, bblm_callbacks, pb.fLanguage, -1);
+                if (!more_runs) {
+                    break;
+                }
+
+                while ((c = nextchar(r, p, pb))) {
+                    if (c==' ' || c=='\r' || c=='\n') {
+                        break;
+                    }
+                }
+                more_runs = addRunAt(kErlCommentTagRunKind, r, bblm_callbacks, pb.fLanguage, -1);
+    			if (!more_runs) {
 					break;
 				}
 			}
@@ -324,7 +322,7 @@ static bool colortype(
 	c = p[0];
     NSMutableString* candidate = [[NSMutableString alloc] initWithCapacity: p.CharsLeft()];
     bool inToken = false;
-    
+
 	while (c && more_runs && in_type)
 	{
         switch (c)
@@ -363,7 +361,7 @@ static bool colortype(
                 more_runs = addRunAt(kErlTypeRunKind, r, bblm_callbacks, pb.fLanguage, -1);
                 if (more_runs)
                 {
-                    more_runs = colorcomment(pb, r, p, bblm_callbacks); 
+                    more_runs = colorcomment(pb, r, p, bblm_callbacks);
                 }
                 break;
             case '\\':
@@ -418,7 +416,7 @@ static void CalculateRuns(BBLMParamBlock &pb,
 		// If we're in the basic 'code' state, check for each interesting char (rundelims[i].start).
 		switch (c)
 		{
-		case '"': 
+		case '"':
 			// This might be a string.
 			// Until now, we had code.
 			more_runs = addRunAt(kBBLMCodeRunKind, r, bblm_callbacks, pb.fLanguage, -1);
@@ -427,7 +425,7 @@ static void CalculateRuns(BBLMParamBlock &pb,
 				more_runs = colorstr(pb,r,p,bblm_callbacks);
 			}
 			break;
-		case '?': 
+		case '?':
 			// This might be a macro invocation.
 			// Until now, we had code.
 			more_runs = addRunAt(kBBLMCodeRunKind, r, bblm_callbacks, pb.fLanguage, -1);
@@ -442,10 +440,10 @@ static void CalculateRuns(BBLMParamBlock &pb,
 			more_runs = addRunAt(kBBLMCodeRunKind, r, bblm_callbacks, pb.fLanguage, -1);
 			if (more_runs)
 			{
-				more_runs = colorcomment(pb, r, p, bblm_callbacks); 
+				more_runs = colorcomment(pb, r, p, bblm_callbacks);
 			}
 			break;
-        case '-': 
+        case '-':
             // This might be a type.
             if (p.strcmp("-type") == 0 || p.strcmp("-opaque") == 0 || p.strcmp("-spec") == 0 || p.strcmp("-callback") == 0 || p.strcmp("-record") == 0) {
                 // Until now, we had code.
@@ -535,7 +533,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
         kMatchAtomPInsideParentheses,
 		kMatchAtomPClosingParenthesis
     };
-    
+
     UInt32 theAtomStart = 0;
     UInt32 theAtomEnd = 0;
 	UInt32 theFirstParamStart = 0;
@@ -547,7 +545,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
 	int bracketsCount = 0;
 	int accoladeCount = 0;
 	
-    EMatchAtomPState state; 
+    EMatchAtomPState state;
 	// We first need an atom, which starts with a lower case letter.
     UInt16 theChar = inIter.GetNextChar();
     if (theChar == 0 || !islower(theChar)) {
@@ -556,7 +554,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
         theAtomStart = (int)inIter.Offset() - 1;
         state = kMatchAtomPInAtom;
     }
-    
+
 	// Then we need to skip until the end of the atom.
     while (state == kMatchAtomPInAtom) {
         theChar = inIter.GetNextChar();
@@ -577,7 +575,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
             state = kMatchAtomPUnmatch;
         }
     }
-    
+
     // Skip spaces and comments until the opening parenthesis.
     while (state == kMatchAtomPBeforeOpeningParenthesis) {
         theChar = inIter.GetNextChar();
@@ -870,7 +868,7 @@ static OSErr addAttribute(UInt32 attrStart, UInt32 attrEnd, UInt32 firstParamSta
 			nameAddr = attrIter.Address();
 		}
 
-		err = bblmAddTokenToBuffer(	&bblm_callbacks, 
+		err = bblmAddTokenToBuffer(	&bblm_callbacks,
 									pb.fFcnParams.fTokenBuffer,
 									nameAddr,
 									namelen,
@@ -925,7 +923,7 @@ static void addFunction(UInt32 atomStart, UInt32 atomEnd, UInt32 paramEnd, UInt3
         }
     }
     indexName--;
-    
+
 	UInt32 offset = 0;
 	(void) bblmAddTokenToBuffer(	&bblm_callbacks,
 								pb.fFcnParams.fTokenBuffer,
@@ -1056,7 +1054,7 @@ static void ScanForFunctions(BBLMParamBlock& pb,
             case '\n':
                 startline = true;
                 break;
-                
+
             case ' ':
                 startline = false;
                 break;
@@ -1158,8 +1156,8 @@ static void AdjustRangeForTextCompletion(BBLMParamBlock &pb, bblmAdjustCompletio
 		CFRange range = ioParams.fInProposedCompletionRange;
 		BBLMTextIterator text(pb);
 		
-		if (range.location == kCFNotFound && 
-			ioParams.fInSelectionRange.location != kCFNotFound && 
+		if (range.location == kCFNotFound &&
+			ioParams.fInSelectionRange.location != kCFNotFound &&
 			ioParams.fInSelectionRange.length == 0)
 		{
 			range = ioParams.fInSelectionRange;
@@ -1177,8 +1175,8 @@ static void AdjustRangeForTextCompletion(BBLMParamBlock &pb, bblmAdjustCompletio
 
 static void SetCategoryTableForTextCompletion(BBLMCategoryTable inCategoryTable)
 {
-    inCategoryTable[(SInt8) '?'] = 'a';   
-    inCategoryTable[(SInt8) '_'] = 'a';   
+    inCategoryTable[(SInt8) '?'] = 'a';
+    inCategoryTable[(SInt8) '_'] = 'a';
     inCategoryTable[(SInt8) '-'] = 'a';
     inCategoryTable[(SInt8) '!'] = '-';
     inCategoryTable[(SInt8) ':'] = 'a';
@@ -1269,7 +1267,7 @@ NSString* FindSystemApplication(NSString* applicationName) {
             }
         }
     }
-    
+
     NSString* output = EvalErlang([NSString stringWithFormat: @"code:lib_dir(%@).", applicationName]);
     if (output != nil) {
         NSString* path = ParseErlangString(output);
@@ -1369,8 +1367,8 @@ void CreateURLByResolvingIncludeFileMessage(bblmResolveIncludeParams& ioParams) 
         }
     } while (false);
 }
-    
-}
+
+} // namespace com_semiocast_bblm_erlang
 
 using namespace com_semiocast_bblm_erlang;
 
