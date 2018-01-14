@@ -35,6 +35,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+// BBEdit SDK uses old-style macros
+#define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 1
+#include <AssertMacros.h>
+
 #include <CoreFoundation/CoreFoundation.h>
 #include <Foundation/Foundation.h>
 
@@ -340,14 +344,14 @@ static bool colortype(
                         [candidate appendString:@"()"];
                         if ([gNonParametrizedTypesSet containsObject: candidate]) {
                             (void) nextchar(r, p, pb);
-                            (void) addRunAt(kErlTypeRunKind, r, bblm_callbacks, pb.fLanguage, -[candidate length], true);
+                            (void) addRunAt(kErlTypeRunKind, r, bblm_callbacks, pb.fLanguage, -(unsigned int)[candidate length], true);
                             more_runs = addRunAt(kErlBuiltInTypeRunKind, r, bblm_callbacks, pb.fLanguage);
                             [candidate release];
                             candidate = [[NSMutableString alloc] initWithCapacity: p.CharsLeft()];
                         }
                     } else {
                         if ([gParametrizedTypesSet containsObject: candidate]) {
-                            (void) addRunAt(kErlTypeRunKind, r, bblm_callbacks, pb.fLanguage, -[candidate length] - 1, true);
+                            (void) addRunAt(kErlTypeRunKind, r, bblm_callbacks, pb.fLanguage, -(unsigned int)[candidate length] - 1, true);
                             more_runs = addRunAt(kErlBuiltInTypeRunKind, r, bblm_callbacks, pb.fLanguage, -1);
                         }
                     }
@@ -548,7 +552,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
     if (theChar == 0 || !islower(theChar)) {
         state = kMatchAtomPUnmatch;
     } else {
-        theAtomStart = inIter.Offset() - 1;
+        theAtomStart = (int)inIter.Offset() - 1;
         state = kMatchAtomPInAtom;
     }
     
@@ -558,14 +562,14 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
         if (theChar == 0) {
             state = kMatchAtomPUnmatch;
         } else if (isspace(theChar) || theChar == '\r' || theChar == '\n') {
-            theAtomEnd = inIter.Offset() - 1;
+            theAtomEnd = (int)inIter.Offset() - 1;
             state = kMatchAtomPBeforeOpeningParenthesis;
         } else if (theChar == '(') {
-			theFirstParamStart = inIter.Offset();
+			theFirstParamStart = (int)inIter.Offset();
             theAtomEnd = theFirstParamStart - 1;
             state = kMatchAtomPBeforeFirstParamStart;
         } else if (theChar == '%') {
-            theAtomEnd = inIter.Offset() - 1;
+            theAtomEnd = (int)inIter.Offset() - 1;
             eat_line(inIter);
             state = kMatchAtomPBeforeOpeningParenthesis;
         } else if (!iswordchar(theChar)) {
@@ -579,7 +583,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
         if (theChar == 0) {
             state = kMatchAtomPUnmatch;
         } else if (theChar == '(') {
-			theFirstParamStart = inIter.Offset();
+			theFirstParamStart = (int)inIter.Offset();
             state = kMatchAtomPBeforeFirstParamStart;
         } else if (theChar == '%') {
             eat_line(inIter);
@@ -606,8 +610,8 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
         } else if (theChar == ')') {
 			if (parenthesisCount == 0) {
                 state = kMatchAtomPClosingParenthesis;
-    		    theFirstParamEnd = inIter.Offset() - 1;
-                theParamEnd = inIter.Offset();
+                theFirstParamEnd = (int)inIter.Offset() - 1;
+                theParamEnd = (int)inIter.Offset();
             } else {
                 parenthesisCount--;
             }
@@ -620,7 +624,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
             startLine = false;
 		} else {
 		    inIter--;
-		    theFirstParamStart = inIter.Offset();
+		    theFirstParamStart = (int)inIter.Offset();
 			state = kMatchAtomPBeforeFirstParamEnd;
             startLine = false;
         }
@@ -640,8 +644,8 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
         } else if (theChar == ')') {
 			if (parenthesisCount == 0) {
                 state = kMatchAtomPClosingParenthesis;
-    		    theFirstParamEnd = inIter.Offset() - 1;
-                theParamEnd = inIter.Offset();
+                theFirstParamEnd = (int)inIter.Offset() - 1;
+                theParamEnd = (int)inIter.Offset();
             } else {
                 parenthesisCount--;
             }
@@ -672,7 +676,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
             startLine = false;
 		} else if ((parenthesisCount == 0) && (bracketsCount == 0) && (accoladeCount == 0) && (isspace(theChar) || theChar == ',')) {
 		    inIter--;
-		    theFirstParamEnd = inIter.Offset();
+		    theFirstParamEnd = (int)inIter.Offset();
 			state = kMatchAtomPInsideParentheses;
             startLine = false;
         }
@@ -692,7 +696,7 @@ static bool match_atom_parentheses(BBLMTextIterator& inIter, UInt32* outAtomStar
 		} else if (theChar == ')') {
 			if (parenthesisCount == 0) {
 				state = kMatchAtomPClosingParenthesis;
-				theParamEnd = inIter.Offset();
+				theParamEnd = (int)inIter.Offset();
 			} else {
 				parenthesisCount--;
 			}
@@ -1002,11 +1006,11 @@ static void ScanForCalloutInComments(BBLMTextIterator& iter, BBLMParamBlock& pb,
 			{
 				if (iter.CharsLeft() > 5 && ((iter.strcmp("todo ") == 0) || (iter.strcmp("TODO ") == 0)))
 				{
-					UInt32 startTodo = iter.Offset() - 1;
+					UInt32 startTodo = (int)iter.Offset() - 1;
 					iter += 5;
-					UInt32 startText = iter.Offset();
+					UInt32 startText = (int)iter.Offset();
 					bool end_line = eat_line(iter);
-					UInt32 endText = iter.Offset() - 1;
+					UInt32 endText = (int)iter.Offset() - 1;
 					if (!end_line)
 					{
 						endText++;
@@ -1065,7 +1069,7 @@ static void ScanForFunctions(BBLMParamBlock& pb,
             // Attribute.
             case '-':
                 if (match_attribute(iter, &atomStart, &atomEnd, &firstParamStart, &firstParamEnd)) {
-                    paramEnd = iter.Offset() - 2;
+                    paramEnd = (int)iter.Offset() - 2;
                     atomStart--;
                     addAttribute(atomStart, atomEnd, firstParamStart, firstParamEnd, paramEnd, pb, bblm_callbacks);
                 }
@@ -1106,7 +1110,7 @@ static void ScanForFunctions(BBLMParamBlock& pb,
                     }
                 }
                 eat_line(iter);
-                functionEnd = iter.Offset() - 1;
+                functionEnd = (int)iter.Offset() - 1;
                 startline = true;
                 break;
         }
