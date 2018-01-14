@@ -481,9 +481,10 @@ static bool isCommentOrTypeKind(NSString* kind)
             || [kErlBuiltInTypeRunKind isEqualToString:kind];
 }
 
-static void AdjustRange(BBLMParamBlock &params,
-						const BBLMCallbackBlock &callbacks)
-{	
+// Adjust indices of first and last language run to be rescanned
+// We need to rescan from the beginning of a comment or a type declaration.
+static
+void AdjustRange(BBLMParamBlock &params, const BBLMCallbackBlock &callbacks) {
 	DescType language;
 	NSString* kind;
 	SInt32 charPos;
