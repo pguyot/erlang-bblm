@@ -14,6 +14,12 @@ It recognizes the following Erlang files:
 
 Please use Erlang Language Module v1.2 for BBEdit 9 and BBEdit 10.
 
+Download
+--------
+
+The binary can be downloaded from GitHub:
+https://github.com/pguyot/erlang-bblm/releases/tag/v1.3
+
 Installation
 ------------
 
