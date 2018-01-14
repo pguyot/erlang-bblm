@@ -1,4 +1,4 @@
-Erlang Language Module for BBEdit v1.3, (2014/10/27)
+Erlang Language Module for BBEdit v1.4, (2018/01/14)
 ========================
 
 The Erlang Language Module introduces syntax colorization, auto-completion,
@@ -14,11 +14,21 @@ It recognizes the following Erlang files:
 
 Please use Erlang Language Module v1.2 for BBEdit 9 and BBEdit 10.
 
+Inline help through auto-completion
+-----------------------------------
+
+Erlang Language Module main feature consists in providing inline help through
+BBEdit completion feature. When typing calls to functions in OTP modules,
+Erlang Language Module displays the actual argument order with the names of the
+arguments as well as the return values as described in the documentation.
+
+![alt text](https://raw.githubusercontent.com/pguyot/erlang-bblm/master/completion_example.png)
+
 Download
 --------
 
 The binary can be downloaded from GitHub:
-https://github.com/pguyot/erlang-bblm/releases/tag/v1.3
+https://github.com/pguyot/erlang-bblm/releases/tag/v1.4
 
 Installation
 ------------
@@ -103,10 +113,16 @@ Change history
     - [FEA]   include and include_lib files can be opened from the popup (BBEdit 11 addition).
     - [FIX]   Fixed algorithmic bugs revelead by Clang analyzer.
 
+* 1.4 (2018/01/14)
+
+    - [ENH]   Upgraded for BBEdit 12.1 (64 bits).
+    - [ENH]   Updated completion lists for Erlang OTP 20
+    - [FEA]   Added faceless helper application for reference lookups which either opens the man page in Terminal.app (if found) or performs a lookup on erlang.org in the default browser.
+
 License
 -------
 
-Copyright (c) 2008-2014 by Paul Guyot, Semiocast.
+Copyright (c) 2008-2018 by Paul Guyot, Semiocast.
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
