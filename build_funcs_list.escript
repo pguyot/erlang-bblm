@@ -15,45 +15,44 @@
 
 main(Dirs) ->
     AllSpecs = lists:flatmap(fun(Dir) ->
-        Specs = filelib:wildcard(filename:join([Dir, "specs", "*.xml"])),
-        case Specs of
-            [] ->
-                Srcs = filelib:wildcard(filename:join([Dir, "src", "*.xml"])),
-                lists:flatmap(fun(XMLSrc) ->
-                    try
-                        process_xml_src_file(XMLSrc)
-                    catch T:V ->
-                        io:format(standard_error, "Could not parse src file ~s\n~p:~p\n~p\n", [XMLSrc, T, V, erlang:get_stacktrace()]),
-                        []
-                    end
-                end, Srcs);
-            _ ->
-                lists:flatmap(fun(XMLSpec) ->
-                    try
-                        process_xml_spec_file(XMLSpec)
-                    catch T:V ->
-                        io:format(standard_error, "Could not parse spec file ~s\n~p:~p\n~p\n", [XMLSpec, T, V, erlang:get_stacktrace()]),
-                        []
-                    end
-                end, Specs)
-        end
+        SpecFiles = filelib:wildcard(filename:join([Dir, "specs", "*.xml"])),
+        SpecsFromSpecFiles = lists:flatmap(fun(XMLSpec) ->
+            try
+                process_xml_spec_file(XMLSpec)
+            catch T:V ->
+                io:format(standard_error, "Could not parse spec file ~s\n~p:~p\n~p\n", [XMLSpec, T, V, erlang:get_stacktrace()]),
+                []
+            end
+        end, SpecFiles),
+        SrcFiles = filelib:wildcard(filename:join([Dir, "src", "*.xml"])),
+        SpecsFromSrcFiles = lists:flatmap(fun(XMLSrc) ->
+            try
+                process_xml_src_file(XMLSrc)
+            catch T:V ->
+                io:format(standard_error, "Could not parse src file ~s\n~p:~p\n~p\n", [XMLSrc, T, V, erlang:get_stacktrace()]),
+                []
+            end
+        end, SrcFiles),
+        merge_specs(SpecsFromSpecFiles, SpecsFromSrcFiles)
     end, Dirs),
     SortedSpecs = lists:sort(AllSpecs),
     io:put_chars("\t<key>ErlangFunctionsForCompletion</key>\n"),
     io:put_chars("\t<array>\n"),
     io:put_chars("\t\t<!-- exported and documented functions -->\n"),
-    lists:foreach(fun({_ModuleNameL, _ModuleName, Functions, _Types}) ->
+    lists:foreach(fun({_ModuleNameL, _ModuleName, Specs}) ->
+        Functions = [Formatted || {function, _Name, _Arity, Formatted} <- Specs],
         io:put_chars(Functions)
-    end, lists:sort(SortedSpecs)),
+    end, SortedSpecs),
     io:put_chars("\t</array>\n"),
     io:put_chars("\t<key>ErlangTypesForCompletion</key>\n"),
     io:put_chars("\t<array>\n"),
     io:put_chars("\t\t<!-- built-in types -->\n"),
     io:put_chars("\t\tSee: http://www.erlang.org/doc/reference_manual/typespec.html\n"),
     io:put_chars("\t\t<!-- exported and documented types -->\n"),
-    lists:foreach(fun({_ModuleNameL, _ModuleName, _Functions, Types}) ->
+    lists:foreach(fun({_ModuleNameL, _ModuleName, Specs}) ->
+        Types = [Formatted || {type, _Name, _Arity, Formatted} <- Specs],
         io:put_chars(Types)
-    end, lists:sort(SortedSpecs)),
+    end, SortedSpecs),
     io:put_chars("\t</array>\n").
 
 process_xml_src_file(XMLFile) ->
@@ -69,26 +68,31 @@ process_xml_src_file(XMLFile) ->
                     lists:foldl(fun(Func, Acc) ->
                         case Func of
                             #xmlElement{name = func, content = FuncElements} ->
-                                [process_docsrc_function(ModuleName, FuncElements) | Acc];
+                                [process_docsrc_function(XMLFile, ModuleName, FuncElements) | Acc];
                             _ -> Acc
                         end
                     end, [], Funcs);
-                _ -> [] % no function was found (e.g. erlang_stub.xml)
+                _ ->
+                    io:format("no function found in ~s\n", [XMLFile]),
+                    [] % no function was found (e.g. erlang_stub.xml)
             end,
-            [{string:to_lower(ModuleName), ModuleName, lists:reverse(FormattedFunctionsR), []}];
+            [{string:to_lower(ModuleName), ModuleName, lists:reverse(FormattedFunctionsR)}];
         _ ->
             []  % not an erl_ref file.
     end.
 
-process_docsrc_function(ModuleName, FuncElements) ->
+process_docsrc_function(XMLFile, ModuleName, FuncElements) ->
     FunctionNames = lists:foldl(fun(FuncElement, Acc) ->
         case FuncElement of
+            #xmlElement{name = name, content = []} ->
+                % New documentation format, specification is generated from source code
+                Acc;
             #xmlElement{name = name, content = FuncNameElements} ->
                 FuncName = xml_flatten(FuncNameElements, []),
                 Parsed = parse_function_head(ModuleName, FuncName),
                 case Parsed of
                     {error, cannot_process} ->
-                        io:format(standard_error, "Module ~s : cannot process ~s\n", [ModuleName, FuncName]),
+                        io:format(standard_error, "Module ~s : cannot process src file ~s\nfuncname = ~s, funcelements = ~1000p\n", [ModuleName, XMLFile, FuncName, FuncNameElements]),
                         Acc;
                     _ -> [Parsed | Acc]
                 end;
@@ -99,10 +103,10 @@ process_docsrc_function(ModuleName, FuncElements) ->
         case ParsedFunctionName of
             {Name, Args, ReturnType} ->
                 FormattedFunctionName = format_function(Name, Args, ReturnType),
-                {ReturnType, [FormattedFunctionName | Acc]};
+                {ReturnType, [{function, Name, compute_arity(Args), FormattedFunctionName} | Acc]};
             {Name, Args} ->
                 FormattedFunctionName = format_function(Name, Args, PreviousReturnType),
-                {PreviousReturnType, [FormattedFunctionName | Acc]}
+                {PreviousReturnType, [{function, Name, compute_arity(Args), FormattedFunctionName} | Acc]}
         end
     end, {unknown_return_type, []}, FunctionNames),
     Result.
@@ -112,56 +116,65 @@ process_xml_spec_file(XMLFile) ->
     {DOM, _Rest} = do_xmerl_scan(XMLFile, []),
     #xmlElement{name = module, attributes = Attributes, content = Content} = DOM,
     #xmlAttribute{value = ModuleName} = lists:keyfind(name, #xmlAttribute.name, Attributes),
-    {Functions, Types} = process_specs(ModuleName, Content, [], []),
-    [{string:to_lower(ModuleName), ModuleName, lists:reverse(Functions), lists:reverse(Types)}].
+    Specifications = process_specs(ModuleName, Content, []),
+    [{string:to_lower(ModuleName), ModuleName, lists:reverse(Specifications)}].
 
-process_specs(_Module, [], AccFunctions, AccTypes) -> {AccFunctions, AccTypes};
-process_specs(Module, [XMLElement | XMLTail], AccFunctions, AccTypes) ->
+process_specs(_Module, [], Acc) -> Acc;
+process_specs(Module, [XMLElement | XMLTail], Acc) ->
     case XMLElement of
         #xmlElement{name = type, content = SubElements} ->
-            Type = process_type(Module, SubElements),
-            process_specs(Module, XMLTail, AccFunctions, [Type | AccTypes]);
+            NewAcc = case process_type(Module, SubElements) of
+                {value, TypeSpec} -> [TypeSpec | Acc];
+                false -> Acc
+            end,
+            process_specs(Module, XMLTail, NewAcc);
         #xmlElement{name = spec, content = SubElements} ->
-            Function = process_function(Module, SubElements),
-            process_specs(Module, XMLTail, [Function | AccFunctions], AccTypes);
+            NewAcc = case process_function(Module, SubElements) of
+                {value, FunctionSpec} -> [FunctionSpec | Acc];
+                false -> Acc
+            end,
+            process_specs(Module, XMLTail, NewAcc);
         _ ->
-            process_specs(Module, XMLTail, AccFunctions, AccTypes)
+            process_specs(Module, XMLTail, Acc)
     end.
 
 process_function(Module, Elements) ->
-    case parse_xml_spec(Elements, name, [contract, clause, head]) of
-        {ok, {FunctionName, FunctionDef}} ->
+    case parse_xml_spec(Elements, name, arity, [contract, clause, head]) of
+        {ok, {FunctionName, FunctionArity, FunctionDef}} ->
             case parse_function_head(Module, FunctionDef) of
                 {error, cannot_process} ->
                     io:format(standard_error, "Module ~s : cannot process ~s (~s)\n", [Module, xml_escape(FunctionName), xml_escape(FunctionDef)]),
-                    [];
+                    false;
                 {Name, Args, ReturnType} ->
-                    format_function(Name, Args, ReturnType)
+                    {value, {function, Name, FunctionArity, format_function(Name, Args, ReturnType)}}
             end;
         {error, Reason} ->
             io:format(standard_error, "Module ~s : cannot process spec (~100p)\n", [Module, Reason]),
-            []
+            false
     end.
 
 process_type(Module, Elements) ->
-    case parse_xml_spec(Elements, name, [typedecl, typehead, marker]) of
-        {ok, {TypeName, TypeDef}} ->
+    case parse_xml_spec(Elements, name, n_vars, [typedecl, typehead, marker]) of
+        {ok, {TypeName, Arity, TypeDef}} ->
             case parse_type_marker(Module, TypeDef) of
                 {error, cannot_process} ->
                     io:format(standard_error, "Module ~s : cannot process ~s (~s)\n", [Module, xml_escape(TypeName), xml_escape(TypeDef)]),
-                    [];
+                    false;
                 {Name, Args} ->
-                    format_type(Name, Args)
+                    {value, {type, Name, Arity, format_type(Name, Args)}}
             end;
         {error, Reason} ->
             io:format(standard_error, "Module ~s : cannot process type (~p)\n", [Module, Reason]),
-            []
+            false
     end.
 
-parse_xml_spec(Elements, NameTag, DefPath) ->
+parse_xml_spec(Elements, NameTag, ArityTag, DefPath) ->
     NameElem = lists:keyfind(NameTag, #xmlElement.name, Elements),
     NameContent = NameElem#xmlElement.content,
     Name = xml_flatten(NameContent, []),
+    ArityElem = lists:keyfind(ArityTag, #xmlElement.name, Elements),
+    ArityContent = ArityElem#xmlElement.content,
+    Arity = list_to_integer(unicode:characters_to_list(xml_flatten(ArityContent, []))),
     DefContentT = lists:foldl(fun(PathElement, AccContent) ->
         case AccContent of
             {ok, AccElems} ->
@@ -183,7 +196,7 @@ parse_xml_spec(Elements, NameTag, DefPath) ->
     case DefContentT of
         {ok, DefContent} ->
             Def = xml_flatten(DefContent, []),
-            {ok, {Name, Def}};
+            {ok, {Name, Arity, Def}};
         {error, _Reason} ->
             DefContentT
     end.
@@ -262,3 +275,39 @@ do_xmerl_scan(File, Options) ->
     catch exit:{bad_character_code, Content, utf8} ->
         xmerl_scan:string(Content, [{encoding, 'utf-8'} | Options])
     end.
+
+merge_specs(SpecsFromSpecFiles, SpecsFromSrcFiles) ->
+    merge_specs0(lists:sort(SpecsFromSpecFiles), lists:sort(SpecsFromSrcFiles), []).
+
+merge_specs0([{ModuleLower, Module, GeneratedSpecs} | GeneratedTail], [{ModuleLower, Module, SrcSpecs} | SrcTail], Acc) ->
+    MergedSpecs = merge_module_specs(lists:sort(GeneratedSpecs), lists:sort(SrcSpecs), []),
+    NewAcc = [{ModuleLower, Module, MergedSpecs} | Acc],
+    merge_specs0(GeneratedTail, SrcTail, NewAcc);
+merge_specs0([{GeneratedModuleLower, GeneratedModule, GeneratedSpecs} | GeneratedTail], [{SrcModuleLower, SrcModule, SrcSpecs} | SrcTail], Acc) ->
+    if
+        GeneratedModuleLower < SrcModuleLower ->
+            merge_specs0(GeneratedTail, [{SrcModuleLower, SrcModule, SrcSpecs} | SrcTail], [{GeneratedModuleLower, GeneratedModule, GeneratedSpecs} | Acc]);
+        true ->
+            merge_specs0([{GeneratedModuleLower, GeneratedModule, GeneratedSpecs} | GeneratedTail], SrcTail, [{SrcModuleLower, SrcModule, SrcSpecs} | Acc])
+    end;
+merge_specs0(GeneratedSpecs, [], Acc) -> lists:reverse(Acc, GeneratedSpecs);
+merge_specs0([], SrcSpecs, Acc) -> lists:reverse(Acc, SrcSpecs).
+
+merge_module_specs([{Type, Name, Arity, Spec} | GeneratedTail], [{Type, Name, Arity, _SrcSpec} | SrcTail], Acc) ->
+    % Favor generated specs for now.
+    merge_module_specs(GeneratedTail, SrcTail, [{Type, Name, Arity, Spec} | Acc]);
+merge_module_specs([GeneratedSpecT | GeneratedTail], [SrcSpecT | SrcTail], Acc) ->
+    if
+        GeneratedSpecT < SrcSpecT ->
+            merge_module_specs(GeneratedTail, [SrcSpecT | SrcTail], [GeneratedSpecT | Acc]);
+        true ->
+            merge_module_specs([GeneratedSpecT | GeneratedTail], SrcSpecT, [SrcSpecT | Acc])
+    end;
+merge_module_specs(GeneratedSpecs, [], Acc) -> lists:reverse(Acc, GeneratedSpecs);
+merge_module_specs([], SrcSpecs, Acc) -> lists:reverse(Acc, SrcSpecs).
+
+compute_arity(Expr) ->
+    length(string:tokens(unicode:characters_to_list(Expr), ",")).
+
+
+    
