@@ -1,5 +1,5 @@
 language: objective-c
 xcode_project: ErlangBBLM.xcodeproj
 xcode_scheme: Debug
-install:
-    - sh install_bbedit_sdk.sh
+before_install:
+  brew install erlang

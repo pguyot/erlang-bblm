@@ -42,8 +42,8 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <Foundation/Foundation.h>
 
-#include "BBEdit SDK/Interfaces/Language Modules/BBLMInterface.h"
-#include "BBEdit SDK/Interfaces/Language Modules/BBLMTextIterator.h"
+#include "LanguageModuleSDK/Interfaces/BBLMInterface.h"
+#include "LanguageModuleSDK/Interfaces/BBLMTextIterator.h"
 
 #include "ErlangBBLM.h"
 #include "ErlangRuntime.h"

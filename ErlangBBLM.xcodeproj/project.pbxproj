@@ -36,6 +36,8 @@
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.gcc;
 			fileType = sourcecode.c;
+			inputFiles = (
+			);
 			isEditable = 1;
 			outputFiles = (
 			);
@@ -53,8 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMTextIterator.h; path = "BBEdit SDK/Interfaces/Language Modules/BBLMTextIterator.h"; sourceTree = "<group>"; };
-		2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMInterface.h; path = "BBEdit SDK/Interfaces/Language Modules/BBLMInterface.h"; sourceTree = "<group>"; };
+		2EADE3E1056EA12A004A4EFC /* BBLMTextIterator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMTextIterator.h; path = LanguageModuleSDK/Interfaces/BBLMTextIterator.h; sourceTree = "<group>"; };
+		2EADE3E2056EA12A004A4EFC /* BBLMInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BBLMInterface.h; path = LanguageModuleSDK/Interfaces/BBLMInterface.h; sourceTree = "<group>"; };
 		2ED4605B05179C27006BE845 /* ErlangBBLM.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = ErlangBBLM.mm; sourceTree = "<group>"; };
 		5F35C4A805A096310030C7CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F35C4A905A096310030C7CA /* Erlang.bblm */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Erlang.bblm; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -279,6 +281,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);

@@ -47,12 +47,10 @@ The plug-in can be compiled with XCode and BBEdit SDK.
 Source code is available on GitHub:
 http://github.com/pguyot/erlang-bblm
 
-The plug-in was compiled with the preview version of the SDK. You can obtain it
-by e-mailing support@barebones.com until it is released.
+The plug-in is now compiled with the SDK as [published on GitHub](https://github.com/siegel/LanguageModuleSDK), as a submodule.
+
 
 [![Build Status](https://travis-ci.org/pguyot/erlang-bblm.png)](https://travis-ci.org/pguyot/erlang-bblm)
-
-(Build fails as the plug-in is incompatible with the current SDK release)
 
 Current limitations
 -------------------

@@ -1,0 +1,3 @@
+[submodule "LanguageModuleSDK"]
+	path = LanguageModuleSDK
+	url = https://github.com/siegel/LanguageModuleSDK
