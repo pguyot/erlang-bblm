@@ -144,7 +144,7 @@ namespace com_semiocast_bblm_erlang {
         NSPipe* stdoutPipe = [NSPipe pipe];
         NSFileHandle* stdoutFile = stdoutPipe.fileHandleForReading;
 
-        NSString* erlManCommand = [NSString stringWithFormat:@"erl -man %@ | col -bx", page];
+        NSString* erlManCommand = [NSString stringWithFormat:@"erl -man %@ > /dev/null 2>&1 || exit 1; erl -man %@ | col -bx", page, page];
 
         NSTask *task = [NSTask new];
         NSDictionary *environmentDict = [[NSProcessInfo processInfo] environment];
